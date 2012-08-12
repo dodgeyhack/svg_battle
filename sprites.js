@@ -4,21 +4,21 @@ function Sprite(type, colour)
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, 50, this.fill);
+            create_triangle(this.svg_object, 0, 0, hex_size, this.fill);
         }
 
     this._constructor_soldier =
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, 30, this.fill);
+            create_triangle(this.svg_object, 0, 0, hex_size / 3 * 2, this.fill);
         }
 
     this._constructor_runner =
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, 20, this.fill);
+            create_triangle(this.svg_object, 0, 0, hex_size / 3, this.fill);
         }
 
     this.fill = colour;

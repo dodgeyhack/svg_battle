@@ -1,4 +1,4 @@
-var hex_size = 50;
+var hex_size = 30;
 
 /*
  * Game co-ordinates are organised in the following manner to give a straight
@@ -6,28 +6,23 @@ var hex_size = 50;
  * This aids in distance and path-finding calculations.
  * http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
  */
-function GameMap(width, height)
+function GameMap(width, height, map_data)
 {
     GameMap.baseConstructor.call(this, width, height);
-
+    
     for (var x = 0; x < width; x++)
     {
         for (var y = 0; y < height; y++)
         {
             var map_obj = new Object();
-        
-            if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
+
+            if (typeof map_data == 'undefined')
             {
-                map_obj.tile_type = 1;
-                
-            }
-            else if (Math.random() < 0.18)
-            {
-                map_obj.tile_type = 2;
+                map_obj.tile_type = 0;
             }
             else
             {
-                map_obj.tile_type = 0;
+                map_obj.tile_type = map_data[y][x];
             }
 
             map_obj.sprite = 
@@ -38,7 +33,7 @@ function GameMap(width, height)
                     hex_size,
                     gamemap_get_fill(map_obj.tile_type)
                 );
-            
+                
             this.map[x][y] = map_obj;
         }
     }
@@ -46,22 +41,23 @@ function GameMap(width, height)
 
 KevLinDev.extend(GameMap, HexMap);
 
-GameMap.prototype._select_hex =
-    function(x, y, list, list_index)
+GameMap.prototype.Dump =
+    function()
     {
-        if (!this.validHex(x, y))
+        console.log("------------------------------------------------");
+        console.log("Map Dump");
+        console.log("width="+this.width+", height="+this.height);
+        for (var y = 0; y < this.height; y++)
         {
-            return list_index;
+            line = ""
+            for (var x = 0; x < this.width; x++)        
+            {
+                line += this.map[x][y].tile_type;
+            }
+            console.log(line)
         }
-
-        list[list_index] = new Object();
-        list[list_index].x = x;
-        list[list_index].y = y;
-
-        console.print(list_index + 1);
-        return list_index + 1;
+        console.log("------------------------------------------------");
     }
-    
     
 GameMap.prototype.getMapScreenX =
     function(x)
@@ -75,6 +71,21 @@ GameMap.prototype.getMapScreenY =
         return gamemap_get_map_screeny(x, this.getBufY(x, y));
     }
 
+GameMap.prototype.isPassable =
+    function(x, y)
+    {
+        var tile = this.getTile(x, y);
+        
+        var v = tile.tile_type;
+        
+        if (v == 0 || v == 5 || v == 6 || v == 7)
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
 function gamemap_get_fill(value)
 {
     switch(value)
@@ -82,12 +93,12 @@ function gamemap_get_fill(value)
         case 0: return "green";
         case 1: return "blue";
         case 2: return "gray";
+        case 3: return "white";
+        case 4: return "black";
+        case 5: return "rgb(220,220,220)";
+        case 6: return "rgb(35,35,35)";
+        case 7: return "cyan";
     }
-}
-
-function gamemap_hex_click(evt) {
-    var hex = evt.target;
-    hex.setAttribute("fill", "white");
 }
 
 function gamemap_get_hex_xoffset(r)

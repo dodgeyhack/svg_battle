@@ -63,6 +63,20 @@ HexMap.prototype.validHex =
         return true;
     }
 
+HexMap.prototype._select_hex =
+    function(x, y, list, list_index)
+    {
+        if (!this.validHex(x, y))
+        {
+            return list_index;
+        }
+
+        list[list_index] = new Object();
+        list[list_index].x = x;
+        list[list_index].y = y;
+
+        return list_index + 1;
+    }
     
 HexMap.prototype.getSurroundingR =
     function(x, y, r)

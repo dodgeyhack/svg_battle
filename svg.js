@@ -22,8 +22,6 @@ function create_hexagon(x, y, r, fill)
     hex.setAttributeNS(null, "fill", fill);
     hex.setAttributeNS(null, "stroke", "black");
 
-    hex.setAttribute("onclick", "map_click(evt)");
-
     mySvg.appendChild(hex);
     
     return hex;

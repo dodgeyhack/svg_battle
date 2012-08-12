@@ -15,31 +15,20 @@ function main()
     mySvg.setAttribute("baseProfile", "tiny");
     container.appendChild(mySvg);
 
-    game_map = new GameMap(14, 7);
-
+    game_map = new GameMap(15, 11, sharkfood_island_map);
+    
     armies[0] = new Army("red");
     armies[1] = new Army("blue");
     
-    armies[0].units[0].moveTo(0, 0);
-    armies[0].units[1].moveTo(1, 0);
-    armies[0].units[2].moveTo(2, 0);
+    armies[0].units[0].moveTo(2, 5);
+    armies[0].units[1].moveTo(4, 4);
+    armies[0].units[2].moveTo(4, 6);
 
-    armies[1].units[0].moveTo(3, 0);
-    armies[1].units[1].moveTo(4, 0);
-    armies[1].units[2].moveTo(5, 0);
-    
+    armies[1].units[0].moveTo(12, 0);
+    armies[1].units[1].moveTo(10, 1);
+    armies[1].units[2].moveTo(10, 3);
+
     var im = new InfluenceMap(game_map, armies[0].units[2], armies[0].units, armies[1].units);
     im.drawOnMap();
-    
-    /*
-    var tx = 2;
-    var ty = 1;
-    var tr = 2;
-    slist = game_map.getSurroundingR(tx, ty, tr);
-    for (var i = 0; i < slist.length; i++)
-    {   
-        game_map.getTile(slist[i].x, slist[i].y).sprite.setAttribute("fill", "yellow");
-    }
-    game_map.getTile(tx, ty).sprite.setAttribute("stroke", "red");
-    */
+
 }
