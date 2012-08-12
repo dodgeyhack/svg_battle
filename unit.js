@@ -26,7 +26,11 @@ function Unit(sprite, move, health, damage)
             this.x = x;
             this.y = y;
             
-            this.sprite.setPosition(get_map_screenx(x), get_map_screeny(x, y));
+            /*
+             * While it's probably ok to have a global game map, I'd prefer not to.
+             */
+            console.log(game_map.getMapScreenY(x, y));
+            this.sprite.setPosition(game_map.getMapScreenX(x), game_map.getMapScreenY(x, y));
         }
 
     this.healOther =

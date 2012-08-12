@@ -6,6 +6,17 @@ var armies = Array(2);
 
 window.onload = main;
 
+function AssertException(message) { this.message = message; }
+AssertException.prototype.toString = function () {
+  return 'AssertException: ' + this.message;
+}
+
+function assert(exp, message) {
+  if (!exp) {
+    throw new AssertException(message);
+  }
+}
+
 function main()
 {
     var container = document.getElementById("svgContainer");
@@ -20,28 +31,26 @@ function main()
     armies[0] = new Army("red");
     armies[1] = new Army("blue");
     
-    armies[0].units[0].moveTo(2, 2);
-    armies[0].units[1].moveTo(3, 3);
-    armies[0].units[2].moveTo(2, 4);
+    armies[0].units[0].moveTo(0, 0);
+    armies[0].units[1].moveTo(1, 0);
+    armies[0].units[2].moveTo(2, 0);
 
-    armies[1].units[0].moveTo(8, 5);
-    armies[1].units[1].moveTo(9, 5);
-    armies[1].units[2].moveTo(10, 5);
+    armies[1].units[0].moveTo(3, 0);
+    armies[1].units[1].moveTo(4, 0);
+    armies[1].units[2].moveTo(5, 0);
     
     var im = new InfluenceMap(game_map, armies[0].units[2], armies[0].units, armies[1].units);
     im.drawOnMap();
     
-    slist = game_map.getSurroundingR(2, 1, 1);
+    var tx = 2;
+    var ty = 1;
+    var tr = 2;
+    slist = game_map.getSurroundingR(tx, ty, tr);
     for (var i = 0; i < slist.length; i++)
-    {
-        game_map.map[slist[i].x][slist[i].y].sprite.setAttribute("fill", "yellow");
+    {   
+        //game_map.getTile(slist[i].x, slist[i].y).sprite.setAttribute("fill", "yellow");
     }
+    game_map.getTile(tx, ty).sprite.setAttribute("stroke", "red");
 
-    game_map.getTile(0, 0);
-    game_map.getTile(1, 0);
-    game_map.getTile(2, -1);
-    game_map.getTile(3, -1);    
-    game_map.getTile(4, -1);
-    game_map.getTile(5, -1);    
-
+    console.log(game_map.getBufY(tx, ty));
 }

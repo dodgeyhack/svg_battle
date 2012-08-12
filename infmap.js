@@ -22,7 +22,7 @@ function InfluenceMap(map, unit, friends, enemies)
     
         this.infmap[enemies[i].x][enemies[i].y] = -255;
         
-        var l = game_map.getSurrounding(enemies[i].x, enemies[i].y);
+        var l = game_map.getSurroundingR(enemies[i].x, enemies[i].y, 1);
 
         /* in squares where I could take damage, subtract that damage */
         for (var j = 0; j < l.length; j++)
@@ -63,11 +63,11 @@ function InfluenceMap(map, unit, friends, enemies)
                 {
                     if (this.infmap[x][y] < 0)
                     {
-                        this.map.map[x][y].sprite.setAttribute("fill", "rgb("+(-this.infmap[x][y])+",0,0)");
+                        this.map.getTile(x, y).sprite.setAttribute("fill", "rgb("+(-this.infmap[x][y])+",0,0)");
                     }
                     else if (this.infmap[x][y] > 0)
                     {
-                        this.map.map[x][y].sprite.setAttribute("fill", "rgb(0,0,"+this.infmap[x][y]+")");
+                        this.map.getTile(x, y).sprite.setAttribute("fill", "rgb(0,0,"+this.infmap[x][y]+")");
                     }
                 }
             }   

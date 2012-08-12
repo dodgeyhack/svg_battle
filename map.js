@@ -45,28 +45,25 @@ function Map(width, height)
      * x and y axis. 
      * This aids in distance and path-finding calculations.
      * http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
-     *
-     *               y x
-     * /  \  /  \  /  \   |  \
-     *  00 --2 -1-- 
-     * \  /  \  /  \  /   |   \
-     *  -- 10 --    --
-     * /  \  /  \  /  \   V    _|
-     *  01    20 -- 
-     * \  /  \  /  \  /
-     *  -- 11 -- 30 -- 
-     * /  \  /  \  /  \
-     *  02 -- 12 -- 40
-     * \  /  \  /  \  / 
      */
+     
+     this.getBufX =
+        function(x)
+         {
+            return x;
+         }
+     
+     this.getBufY =
+        function(x, y)
+         {
+            return y + Math.floor(x / 2);
+         }
     
     this.getTile =
         function(x, y)
         {
-            nx = x;
-            ny = y + Math.floor(x / 2);
-            
-            console.log("getTile("+x+", "+y+") = " + "("+nx+", "+ny+")");
+            nx = this.getBufX(x);
+            ny = this.getBufY(x, y);
             
             return this.map[nx][ny];
         }
@@ -74,27 +71,39 @@ function Map(width, height)
     this._select_hex =
         function(x, y, list, list_index)
         {
-            if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+            bufx = this.getBufX(x);
+            bufy = this.getBufY(x, y);
+        
+            if (bufx < 0 || bufx >= this.width || bufy < 0 || bufy >= this.height)
             {
-                return;
+                return list_index;
             }
             
             list[list_index] = new Object();
             list[list_index].x = x;
             list[list_index].y = y;
             
+            console.print(list_index + 1);
             return list_index + 1;
         }
-
     
     this.getSurroundingR =
         function(x, y, r)
         {
             var minX = x - r;
             var maxX = x + r;
+
+            rlist_max = 1;
+            for (i = r; i > 0; i--)
+            {
+                rlist_max += (6 * i);
+            }
+            console.log(rlist_max);
             
-            var rlist = Array(r * r);
+            var rlist = Array(rlist_max);
             var rlist_index = 0;
+            
+            console.log("------------------------");
             
             for (var i = minX; i <= maxX; i++)
             {
@@ -116,89 +125,26 @@ function Map(width, height)
                 }
             }
 
-            rlist.length = rlist_index;            
+            console.log(rlist_index);
+
+            assert(rlist_index <= rlist_max);
+            rlist.length = rlist_index;
             return rlist;
         }
-
-    this.getSurrounding =
+        
+    this.getMapScreenX =
+        function(x)
+        {
+            return get_map_screenx(this.getBufX(x));
+        }
+        
+    this.getMapScreenY =
         function(x, y)
         {
-            var rlist = Array(6);
-
-            var i = 0;
-
-            if (y > 0)
-            {
-                rlist[i] = new Object();
-                rlist[i].x = x;
-                rlist[i].y = y - 1;
-                i++;
-
-                if (!(x % 2))
-                {
-                    if (x > 0)
-                    {
-                        rlist[i] = new Object();
-                        rlist[i].x = x - 1;
-                        rlist[i].y = y - 1;
-                        i++;
-                    }
-
-                    if (x < this.width -1)
-                    {
-                        rlist[i] = new Object();
-                        rlist[i].x = x + 1;
-                        rlist[i].y = y - 1;
-                        i++;
-                    }
-                }                
-            }
-
-            if (x > 0)
-            {
-                rlist[i] = new Object();
-                rlist[i].x = x - 1;
-                rlist[i].y = y;
-                i++;
-            }
-
-            if (x < this.width -1)
-            {
-                rlist[i] = new Object();
-                rlist[i].x = x + 1;
-                rlist[i].y = y;
-                i++;
-            }
-
-            if (y < this.height - 1)
-            {
-                rlist[i] = new Object();
-                rlist[i].x = x;
-                rlist[i].y = y + 1;
-                i++;
-
-                if (x % 2)
-                {
-                    if (x > 0)
-                    {
-                        rlist[i] = new Object();
-                        rlist[i].x = x - 1;
-                        rlist[i].y = y + 1;
-                        i++;
-                    }
-
-                    if (x < this.width -1)
-                    {
-                        rlist[i] = new Object();
-                        rlist[i].x = x + 1;
-                        rlist[i].y = y + 1;
-                        i++;
-                    }
-                }
-            }
-
-            rlist.length = i;
-            return rlist;        
+            console.log(x+","+y);
+            v = get_map_screeny(x, this.getBufY(x, y));
+            console.log("v="+v);
+            return v;
         }
 }
 
@@ -212,7 +158,7 @@ function map_distance(ox, oy, x, y)
     
     var dz = z - oz;
     
-    var d = max(dx, max(dy, dz));
+    var d = Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
     
     console.log("("+ox+", "+oy+", "+oz+") to ("+x+", "+y+", "+z+") = " + d);
     console.log("Max("+dx+", "+dy+", "+dz+") = "+d);
