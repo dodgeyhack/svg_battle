@@ -1,17 +1,16 @@
-function InfluenceMap(map, unit, friends, enemies)
+function InfluenceMap(gamemap, unit, friends, enemies)
 {
-    this.width = map.width;
-    this.height = map.height;
+    InfluenceMap.baseConstructor.call(this, gamemap.width, gamemap.height);
     
-    this.map = map;
+    this.gamemap = gamemap;
 
-    this.infmap = new Array(this.width);
     for (var i = 0; i < this.width; i++)
     {
-        this.infmap[i] = new Array(this.height);
         for (var j = 0; j < this.height; j++)
         {
-            this.infmap[i][j] = 0;
+            var o = new Object();
+            o.value = 0;
+            this.map[i][j] = o;
         }
     }
     
@@ -20,30 +19,31 @@ function InfluenceMap(map, unit, friends, enemies)
     for (var i = 0; i < enemies.length; i++)
     {
     
-        this.infmap[enemies[i].x][enemies[i].y] = -255;
+        this.map[this.getBufX(enemies[i].x)][this.getBufY(enemies[i].y)] = -255;
+        
         
         var l = game_map.getSurroundingR(enemies[i].x, enemies[i].y, 1);
 
         /* in squares where I could take damage, subtract that damage */
         for (var j = 0; j < l.length; j++)
         {
-            ax = l[j].x;
-            ay = l[j].y;
-            this.infmap[ax][ay] -= enemies[i].damage * 20;
+            tile = this.getTile(l[j].x, l[j].y);
+            
+            tile.value -= enemies[i].damage * 20;
             
             /* in squares where damage would kill me, subtract more */
             if (enemies[i].damage >= unit.health)
             {
-                this.infmap[ax][ay] -= 50 ; 
+                tile.value -= 50 ; 
             }
             
             /* in squares where I could damage enemy, add that damage */
-            this.infmap[ax][ay] += unit.damage * 40;
+            tile.value += unit.damage * 40;
             
             /* in squares where I could kill the enemy, add more */
             if (unit.damage >= enemies[i].health)
             {
-                this.infmap[ax][ay] += 50;
+                tile.value += 50;
             }
         }
     }
@@ -52,24 +52,25 @@ function InfluenceMap(map, unit, friends, enemies)
     /* Add objectives held by enemy */
     
     /* Add squares that are just out of reach of the enemy, closer to their base or objective is higher */
-    
-    
-    this.drawOnMap = 
-        function()
-        {
-            for (var x = 0; x < this.width; x++)
-            {
-                for (var y = 0; y < this.height; y++)
-                {
-                    if (this.infmap[x][y] < 0)
-                    {
-                        this.map.getTile(x, y).sprite.setAttribute("fill", "rgb("+(-this.infmap[x][y])+",0,0)");
-                    }
-                    else if (this.infmap[x][y] > 0)
-                    {
-                        this.map.getTile(x, y).sprite.setAttribute("fill", "rgb(0,0,"+this.infmap[x][y]+")");
-                    }
-                }
-            }   
-        }
 }
+
+KevLinDev.extend(InfluenceMap, HexMap);
+    
+InfluenceMap.prototype.drawOnMap = 
+    function()
+    {
+        for (var x = 0; x < this.width; x++)
+        {
+            for (var y = 0; y < this.height; y++)
+            {
+                if (this.map[x][y].value < 0)
+                {
+                    this.gamemap.map[x][y].sprite.setAttribute("fill", "rgb("+(-this.map[x][y].value)+",0,0)");
+                }
+                else if (this.map[x][y].value > 0)
+                {
+                    this.gamemap.map[x][y].sprite.setAttribute("fill", "rgb(0,0,"+this.map[x][y].value+")");
+                }
+            }
+        }   
+    }

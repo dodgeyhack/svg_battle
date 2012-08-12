@@ -29,7 +29,6 @@ function Unit(sprite, move, health, damage)
             /*
              * While it's probably ok to have a global game map, I'd prefer not to.
              */
-            console.log(game_map.getMapScreenY(x, y));
             this.sprite.setPosition(game_map.getMapScreenX(x), game_map.getMapScreenY(x, y));
         }
 
