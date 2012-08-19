@@ -1,5 +1,8 @@
-function Unit(sprite, move, health, damage)
+function Unit(id, sprite, move, health, damage, game)
 {
+    this.game = game;
+
+    this.id = id;
     this.sprite = sprite;
     this.x = 0;
     this.y = 0;
@@ -19,44 +22,62 @@ function Unit(sprite, move, health, damage)
         this.canDamage = false;
         this.canHeal = true;
     }
-
-    this.moveTo =
-        function(x, y)
-        {
-            this.x = x;
-            this.y = y;
-            
-            /*
-             * While it's probably ok to have a global game map, I'd prefer not to.
-             */
-            this.sprite.setPosition(game_map.getMapScreenX(x), game_map.getMapScreenY(x, y));
-        }
-
-    this.healOther =
-        function(other_unit)
-        {
-            other_unit.heal();
-        }
-
-    this.heal =
-        function heal()
-        {
-            this.health = this.max_health + 1;
-        }
-
-    this.doDamage =
-        function(other_unit)
-        {
-            other_unit.takeDamage(this.damage);
-        }
-
-    this.takeDamage =
-        function(damage)
-        {
-            this.health -= damage;
-            if (this.health < 0)
-            {
-                this.alive = false;
-            }
-        }
 }
+
+Unit.prototype.setTracker =
+    function(tracker)
+    {
+        this.tracker = tracker;
+    }
+
+Unit.prototype.getTracker =
+    function()
+    {
+        return this.tracker;
+    }
+
+Unit.prototype.moveTo =
+    function(x, y)
+    {
+        this.x = x;
+        this.y = y;
+
+        /*
+         * While it's probably ok to have a global game map, I'd prefer not to.
+         */
+        this.sprite.setPosition(this.game.getGameMap().getMapScreenX(x), this.game.getGameMap().getMapScreenY(x, y));
+    }
+
+Unit.prototype.healOther =
+    function(other_unit)
+    {
+        other_unit.heal();
+    }
+
+Unit.prototype.heal =
+    function heal()
+    {
+        this.health = this.max_health + 1;
+    }
+
+Unit.prototype.doDamage =
+    function(other_unit)
+    {
+        other_unit.takeDamage(this.damage);
+    }
+
+Unit.prototype.takeDamage =
+    function(damage)
+    {
+        this.health -= damage;
+        if (this.health < 0)
+        {
+            this.alive = false;
+        }
+    }
+
+Unit.prototype.getId =
+    function()
+    {
+        return this.id;
+    }

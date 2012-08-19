@@ -48,6 +48,24 @@ function create_triangle(parent, x, y, size, fill)
     return tri;
 }
 
+function create_rect(parent, x, y, width, height, fill)
+{
+    var rect = document.createElementNS(svgns, "rect");
+
+    rect.setAttribute("x", x);
+    rect.setAttribute("y", y);
+    
+    rect.setAttribute("width", width);
+    rect.setAttribute("height", height);
+
+    rect.setAttributeNS(null, "fill", fill);
+    rect.setAttributeNS(null, "stroke", "black");
+
+    parent.appendChild(rect);
+    
+    return rect;
+}
+
 function create_group(parent)
 {
     var g = document.createElementNS(svgns, "g");

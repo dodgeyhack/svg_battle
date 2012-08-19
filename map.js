@@ -25,14 +25,7 @@ function GameMap(width, height, map_data)
                 map_obj.tile_type = map_data[y][x];
             }
 
-            map_obj.sprite = 
-                create_hexagon
-                (
-                    gamemap_get_map_screenx(x),
-                    gamemap_get_map_screeny(x, y),
-                    hex_size,
-                    gamemap_get_fill(map_obj.tile_type)
-                );
+            map_obj.sprite = create_hexagon(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y), hex_size, gamemap_get_fill(map_obj.tile_type));
                 
             this.map[x][y] = map_obj;
         }
@@ -41,7 +34,31 @@ function GameMap(width, height, map_data)
 
 KevLinDev.extend(GameMap, HexMap);
 
-GameMap.prototype.Dump =
+GameMap.prototype.clearEventHandlers =
+    function()
+    {
+        for (var y = 0; y < this.height; y++)
+        {
+            for (var x = 0; x < this.width; x++)        
+            {
+                this.map[x][y].sprite.removeAttribute("onclick");
+            }
+        }
+    }
+
+GameMap.prototype.redraw =
+    function()
+    {
+        for (var y = 0; y < this.height; y++)
+        {
+            for (var x = 0; x < this.width; x++)        
+            {
+                this.map[x][y].sprite.setAttribute("fill", gamemap_get_fill(this.map[x][y].tile_type));
+            }
+        }
+    }
+
+GameMap.prototype.dump =
     function()
     {
         console.log("------------------------------------------------");
@@ -49,7 +66,7 @@ GameMap.prototype.Dump =
         console.log("width="+this.width+", height="+this.height);
         for (var y = 0; y < this.height; y++)
         {
-            line = ""
+            line = "";
             for (var x = 0; x < this.width; x++)        
             {
                 line += this.map[x][y].tile_type;
@@ -68,7 +85,8 @@ GameMap.prototype.getMapScreenX =
 GameMap.prototype.getMapScreenY =
     function(x, y)
     {
-        return gamemap_get_map_screeny(x, this.getBufY(x, y));
+        var v = gamemap_get_map_screeny(x, this.getBufY(x, y));
+        return v;
     }
 
 GameMap.prototype.isPassable =
@@ -78,7 +96,7 @@ GameMap.prototype.isPassable =
         
         var v = tile.tile_type;
         
-        if (v == 0 || v == 5 || v == 6 || v == 7)
+        if (v === 0 || v === 5 || v === 6 || v === 7)
         {
             return true;
         }
@@ -98,6 +116,7 @@ function gamemap_get_fill(value)
         case 5: return "rgb(220,220,220)";
         case 6: return "rgb(35,35,35)";
         case 7: return "cyan";
+        default: return "yellow";
     }
 }
 
@@ -118,11 +137,6 @@ function gamemap_get_map_screenx(x)
 
 function gamemap_get_map_screeny(x, y)
 {
-    return(
-        gamemap_get_hex_yoffset(hex_size) 
-        +
-        (y * gamemap_get_hex_yoffset(hex_size))
-        +
-        (y + (x % 2)) * (gamemap_get_hex_yoffset(hex_size))
-    );
+    var v = (gamemap_get_hex_yoffset(hex_size) + (y * gamemap_get_hex_yoffset(hex_size)) + (y + (x % 2)) * (gamemap_get_hex_yoffset(hex_size)));
+    return v;
 }

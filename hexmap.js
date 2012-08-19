@@ -84,9 +84,13 @@ HexMap.prototype.getSurroundingR =
         var minX = x - r;
         var maxX = x + r;
 
+        /* Work out how big to make the array to fit the hexes */
         rlist_max = 1;
         for (i = r; i > 0; i--)
         {
+            /*
+             * Currently over-estimates (I think)
+             */
             rlist_max += (6 * i);
         }
 
@@ -95,7 +99,11 @@ HexMap.prototype.getSurroundingR =
 
         for (var i = minX; i <= maxX; i++)
         {
-            rlist_index = this._select_hex(i, y, rlist, rlist_index)
+            /* don't add the center hex */
+            if (!(i == x))
+            {
+                rlist_index = this._select_hex(i, y, rlist, rlist_index)
+            }
         }
 
         for (j = r; j > 0; j --)
