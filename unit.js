@@ -24,6 +24,16 @@ function Unit(id, sprite, move, health, damage, game)
     }
 }
 
+Unit.prototype.destroy =
+    function()
+    {
+        this.sprite.destroy();
+        /* release any references so garbage collector can do it's thing */
+        delete this.sprite;
+        delete this.tracker;
+        delete this.game;
+    }
+
 Unit.prototype.setTracker =
     function(tracker)
     {
@@ -74,6 +84,12 @@ Unit.prototype.takeDamage =
         {
             this.alive = false;
         }
+    }
+    
+Unit.prototype.isDead =
+    function()
+    {
+        return (this.health < 1 ? true : false);
     }
 
 Unit.prototype.getId =

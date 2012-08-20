@@ -7,3 +7,9 @@ function Army(colour, game)
     this.units[1] = new Unit(1, new Sprite("soldier", colour), 3, 3, 2, game);
     this.units[2] = new Unit(2, new Sprite("runner", colour), 5, 1, 1, game);
 }
+
+Army.prototype.removeUnit =
+    function(num)
+    {
+        delete this.units[num];
+    }

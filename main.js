@@ -39,6 +39,45 @@ function unit_on_hex(x, y)
     return false;
 }
 
+function unit_attack_click(evt)
+{
+    var hex = evt.target;
+    var target_id = parseInt(hex.getAttribute("game_attack_unit_id"));
+    
+    /*
+     * TODO: Remove unit from army when dead.
+     * Should probably allow for adding new units to army at the same time.
+     * Will need to change unit selection as array index won't work anymore.
+     */
+    g.attackWithCurrentUnit(target_id);    
+    
+    g.getGameMap().redraw();
+    g.getGameMap().clearEventHandlers();
+
+    set_unit_select_event_handlers();
+}
+
+function set_unit_attack_event_handlers()
+{
+    var ux, uy;
+    var unit = g.getCurrentUnit();
+    
+    var enemy_list = g.getEnemyUnits();
+    
+    for (var i = 0; i < enemy_list.length; i++)
+    {
+        if (hexmap_distance(unit.x, unit.y, enemy_list[i].x, enemy_list[i].y) < 2)
+        {
+            var tile = g.getGameMap().getTile(enemy_list[i].x, enemy_list[i].y);
+            tile.sprite.setAttribute("fill", "rgb(128,0,0)");
+            
+            tile.sprite.setAttribute("onclick", "unit_attack_click(evt)");
+            tile.sprite.setAttribute("game_attack_unit_id", enemy_list[i].getId());
+        }
+    }
+    
+}
+
 function unit_select_click(evt) 
 {
     var hex = evt.target;
@@ -48,13 +87,19 @@ function unit_select_click(evt)
     
     set_unit_select_event_handlers();
     
+    
     var unit_id = parseInt(hex.getAttribute("game_unit_id"));
     
     g.selectUnit(unit_id);
     
     var cur_unit = g.getCurrentUnit();
     
-    if (!cur_unit.getTracker().moved)
+    var tile = g.getGameMap().getTile(cur_unit.x, cur_unit.y);
+    tile.sprite.setAttribute("fill", "yellow");
+    
+    var cur_unit_tracker = cur_unit.getTracker();
+    
+    if (!cur_unit_tracker.moved)
     {
         var poslist = g.getGameMap().getSurroundingR(cur_unit.x, cur_unit.y, cur_unit.move);
 
@@ -65,7 +110,7 @@ function unit_select_click(evt)
             var mx = poslist[posi].x;
             var my = poslist[posi].y;
 
-            var tile = g.getGameMap().getTile(mx, my);
+            tile = g.getGameMap().getTile(mx, my);
 
             if (g.getGameMap().isPassable(mx, my) && !unit_on_hex(mx, my))
             {
@@ -76,6 +121,11 @@ function unit_select_click(evt)
                 tile.sprite.setAttribute("game_pos_y", poslist[posi].y);
             }
         }
+    }
+    
+    if (!cur_unit_tracker.attacked)
+    {
+        set_unit_attack_event_handlers();
     }
 }
 

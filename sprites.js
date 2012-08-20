@@ -36,3 +36,9 @@ function Sprite(type, colour)
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
         }
 }
+
+Sprite.prototype.destroy =
+    function()
+    {
+        this.svg_object.parentNode.removeChild(this.svg_object);
+    }

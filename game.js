@@ -93,4 +93,18 @@ Game.prototype.MoveCurrentUnit =
     }
     
 Game.prototype.attackWithCurrentUnit =
-    function(target) {}
+    function(target_id)
+    {
+        var unit = this.getCurrentUnit();
+        var target = this.armies[(this.cur_team + 1) % this.num_teams].units[target_id];
+        
+        unit.doDamage(target);
+
+        if (target.isDead())
+        {
+            target.destroy();
+            
+        }        
+        
+        unit.getTracker().attacked = true;
+    }
