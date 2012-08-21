@@ -24,6 +24,8 @@ function GameMap(width, height, map_data)
             {
                 map_obj.tile_type = map_data[y][x];
             }
+            
+            map_obj.occupied = false;
 
             map_obj.sprite = create_hexagon(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y), hex_size, gamemap_get_fill(map_obj.tile_type));
                 
@@ -103,6 +105,20 @@ GameMap.prototype.isPassable =
         
         return false;
     }
+
+GameMap.prototype.setOccupied =
+    function(x, y, v)
+    {
+        var tile = this.getTile(x, y);
+        tile.occupied = v;
+    }
+
+GameMap.prototype.isOccupied =
+    function(x, y)
+    {
+        return this.getTile(x, y).occupied;
+    }
+
 
 function gamemap_get_fill(value)
 {

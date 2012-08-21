@@ -8,8 +8,58 @@ function Army(colour, game)
     this.units[2] = new Unit(2, new Sprite("runner", colour), 5, 1, 1, game);
 }
 
-Army.prototype.removeUnit =
-    function(num)
+Army.prototype.getUnit =
+    function(unit_id)
     {
-        delete this.units[num];
+        return this.units[unit_id];
     }
+    
+Army.prototype.addUnit =
+    function(unit)
+    {
+        var id = unit.getId();
+        
+        if (this.units.length < (id - 1))
+        {
+            this.units.length = id;
+        }
+        
+        this.units[id] = unit;
+    }
+
+Army.prototype.removeUnit =
+    function(unit_id)
+    {
+        delete this.units[unit_id];
+    }
+
+function UnitIterator(army)
+{
+    this.army = army;
+    this.current = -1;
+}
+
+UnitIterator.prototype.get =
+    function()
+    {
+        return this.army.units[this.current];
+    }
+    
+UnitIterator.prototype.moveNext =
+    function()
+    {
+        var first = true;
+        
+        while (first || this.army.units[this.current] == undefined)
+        {
+            first = false;
+            this.current++;
+            if (this.current >= this.army.units.length)
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    

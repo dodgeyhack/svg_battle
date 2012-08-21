@@ -20,25 +20,6 @@ function unit_move_click(evt) {
     set_unit_select_event_handlers();
 }
 
-function unit_on_hex(x, y)
-{
-    var i;
-    
-    var unit_list = g.getCurrentArmy().units;
-    
-    unit_list = unit_list.concat(g.getEnemyUnits());
-    
-    for (i = 0; i < unit_list.length; i++)
-    {
-        if (unit_list[i].x == x && unit_list[i].y == y)
-        {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
 function unit_attack_click(evt)
 {
     var hex = evt.target;
@@ -62,20 +43,22 @@ function set_unit_attack_event_handlers()
     var ux, uy;
     var unit = g.getCurrentUnit();
     
-    var enemy_list = g.getEnemyUnits();
+    var enemy_iter = g.getEnemyUnitIterator();
+    var enemy;
     
-    for (var i = 0; i < enemy_list.length; i++)
+    while (enemy_iter.moveNext())
     {
-        if (hexmap_distance(unit.x, unit.y, enemy_list[i].x, enemy_list[i].y) < 2)
+        enemy = enemy_iter.get();
+        if (hexmap_distance(unit.x, unit.y, enemy.x, enemy.y) < 2)
         {
-            var tile = g.getGameMap().getTile(enemy_list[i].x, enemy_list[i].y);
+            var tile = g.getGameMap().getTile(enemy.x, enemy.y);
             tile.sprite.setAttribute("fill", "rgb(128,0,0)");
             
             tile.sprite.setAttribute("onclick", "unit_attack_click(evt)");
-            tile.sprite.setAttribute("game_attack_unit_id", enemy_list[i].getId());
+            tile.sprite.setAttribute("game_attack_unit_id", enemy.getId());
         }
+        
     }
-    
 }
 
 function unit_select_click(evt) 
@@ -112,7 +95,7 @@ function unit_select_click(evt)
 
             tile = g.getGameMap().getTile(mx, my);
 
-            if (g.getGameMap().isPassable(mx, my) && !unit_on_hex(mx, my))
+            if (g.getGameMap().isPassable(mx, my) && !g.getGameMap().isOccupied(mx, my))
             {
                 tile.sprite.setAttribute("fill", "rgb(128,255,128)");
 
@@ -133,10 +116,12 @@ function set_unit_select_event_handlers()
 {
     var army = g.getCurrentArmy();
     
-    for (var unit_num = 0; unit_num < army.units.length; unit_num++)
+    var ui = new UnitIterator(army);
+    var unit;
+    
+    while (ui.moveNext())
     {
-        /* set up event handlers for unit selection */
-        var unit = army.units[unit_num];
+        unit = ui.get();    
         
         var tile = g.getGameMap().getTile(unit.x, unit.y);
         
