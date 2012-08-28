@@ -12,6 +12,8 @@ function Unit(id, sprite, move, health, damage, game)
     this.damage = damage;
     this.alive = true;
 
+    this.sprite.setText(this.health);
+
     if (damage > 0)
     {
         this.canDamage = true;
@@ -23,6 +25,12 @@ function Unit(id, sprite, move, health, damage, game)
         this.canHeal = true;
     }
 }
+
+Unit.prototype.updateSprite =
+    function()
+    {
+        this.sprite.changeText(this.health);
+    }
 
 Unit.prototype.destroy =
     function()
@@ -68,6 +76,7 @@ Unit.prototype.heal =
     function heal()
     {
         this.health = this.max_health + 1;
+        this.updateSprite();
     }
 
 Unit.prototype.doDamage =
@@ -80,6 +89,7 @@ Unit.prototype.takeDamage =
     function(damage)
     {
         this.health -= damage;
+        this.updateSprite();
         if (this.health < 0)
         {
             this.alive = false;

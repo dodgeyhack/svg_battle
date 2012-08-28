@@ -22,6 +22,7 @@ function Sprite(type, colour)
         }
 
     this.fill = colour;
+    this.text_object = null;
 
     switch (type)
     {
@@ -34,6 +35,19 @@ function Sprite(type, colour)
         function(x, y)
         {
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
+        }
+        
+    this.setText =
+        function(value)
+        {
+            assert(this.text_object == null);
+            this.text_object = create_text(this.svg_object, value, -(hex_size / 2), -(hex_size / 4), "black");
+        }
+        
+    this.changeText =
+        function(value)
+        {
+            update_text(this.text_object, value);
         }
 }
 
