@@ -5,6 +5,7 @@ var g;
 
 var turn_num = 0;
 
+var event_handlers = new EventHandlerTracker();
 
 function unit_move_click(evt) {
     var hex = evt.target;
@@ -13,7 +14,7 @@ function unit_move_click(evt) {
     var my = parseInt(hex.getAttribute("game_pos_y"));
     
     g.getGameMap().redraw();
-    g.getGameMap().clearEventHandlers();
+    event_handlers.removeAllFrom("unit");
 
     g.MoveCurrentUnit(mx, my);
     
@@ -25,15 +26,10 @@ function unit_attack_click(evt)
     var hex = evt.target;
     var target_id = parseInt(hex.getAttribute("game_attack_unit_id"));
     
-    /*
-     * TODO: Remove unit from army when dead.
-     * Should probably allow for adding new units to army at the same time.
-     * Will need to change unit selection as array index won't work anymore.
-     */
     g.attackWithCurrentUnit(target_id);    
     
     g.getGameMap().redraw();
-    g.getGameMap().clearEventHandlers();
+    event_handlers.removeAllFrom("unit");
 
     set_unit_select_event_handlers();
 }
@@ -54,8 +50,8 @@ function set_unit_attack_event_handlers()
             var tile = g.getGameMap().getTile(enemy.x, enemy.y);
             tile.sprite.setAttribute("fill", "rgb(128,0,0)");
             
-            tile.sprite.setAttribute("onclick", "unit_attack_click(evt)");
             tile.sprite.setAttribute("game_attack_unit_id", enemy.getId());
+            event_handlers.addHandler("unit", tile.sprite, "unit_attack_click(evt)");
         }
         
     }
@@ -66,7 +62,7 @@ function unit_select_click(evt)
     var hex = evt.target;
     
     g.getGameMap().redraw();
-    g.getGameMap().clearEventHandlers();
+    event_handlers.removeAllFrom("unit");
     
     set_unit_select_event_handlers();
     
@@ -98,10 +94,9 @@ function unit_select_click(evt)
             if (g.getGameMap().isPassable(mx, my) && !g.getGameMap().isOccupied(mx, my))
             {
                 tile.sprite.setAttribute("fill", "rgb(128,255,128)");
-
-                tile.sprite.setAttribute("onclick", "unit_move_click(evt)");
                 tile.sprite.setAttribute("game_pos_x", poslist[posi].x);
                 tile.sprite.setAttribute("game_pos_y", poslist[posi].y);
+                event_handlers.addHandler("unit", tile.sprite, "unit_move_click(evt)");                
             }
         }
     }
@@ -126,28 +121,35 @@ function set_unit_select_event_handlers()
         var tile = g.getGameMap().getTile(unit.x, unit.y);
         
         tile.sprite.setAttribute("fill", "rgb(128,255,128)");
-        
-        tile.sprite.setAttribute("onclick", "unit_select_click(evt)");
         tile.sprite.setAttribute("game_unit_id", unit.getId());
+        event_handlers.addHandler("unit", tile.sprite, "unit_select_click(evt)");
     }
 }
 
 function next_turn()
 {
-    if (turn_num > 0)
+    if (g.finished)
     {
-        g.nextTurn();
+        event_handlers.removeAll();
+        Message(mySvg, "Game Over");
     }
-    
-    set_unit_select_event_handlers();
-    
-    turn_num++;
+    else
+    {
+        if (turn_num > 0)
+        {
+            g.nextTurn();
+        }
+
+        set_unit_select_event_handlers();
+
+        turn_num++;
+    }
 }
 
 function next_turn_click()
 {
     g.getGameMap().redraw();
-    g.getGameMap().clearEventHandlers();
+    event_handlers.removeAllFrom("unit");
 
     next_turn();
 }
@@ -155,17 +157,15 @@ function next_turn_click()
 function create_dashboard()
 {
     var button =
-        create_rect
+        new Button
         (
             mySvg,
             gamemap_get_map_screenx(g.getGameMap().width + 1),
             gamemap_get_map_screeny(g.getGameMap().width + 1, 1),
-            hex_size,
-            20,
-            "red"
+            "End Turn",
+            "next_turn_click()",
+            event_handlers
         );
-    
-    button.setAttribute("onclick", "next_turn_click()");
 }
 
 function main()

@@ -6,6 +6,8 @@ function Army(colour, game)
     this.units[0] = new Unit(0, new Sprite("heavy", colour), 2, 4, 3, game);
     this.units[1] = new Unit(1, new Sprite("soldier", colour), 3, 3, 2, game);
     this.units[2] = new Unit(2, new Sprite("runner", colour), 5, 1, 1, game);
+    
+    this.num_units = 3;
 }
 
 Army.prototype.getUnit =
@@ -25,12 +27,15 @@ Army.prototype.addUnit =
         }
         
         this.units[id] = unit;
+        
+        this.num_units++;
     }
 
 Army.prototype.removeUnit =
     function(unit_id)
     {
         delete this.units[unit_id];
+        this.num_units--;
     }
 
 function UnitIterator(army)

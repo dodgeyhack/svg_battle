@@ -40,6 +40,8 @@ function Game()
     this.armies[1].getUnit(2).setTracker(new UnitTracker());
     
     this.cur_team = 0;
+    
+    this.finished = false;
 }
 
 Game.prototype.nextTurn =
@@ -112,6 +114,12 @@ Game.prototype.attackWithCurrentUnit =
             this.game_map.setOccupied(target.x, target.y, false);
             enemy.removeUnit(target_id);
             target.destroy();
+            
+            if (enemy.num_units == 0)
+            {
+                this.finished = true;
+                this.winner = this.cur_team;
+            }
         }        
         
         unit.getTracker().attacked = true;
