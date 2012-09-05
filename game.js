@@ -22,21 +22,27 @@ function Game()
     this.armies[1] = new Army("blue", this);
     
     this.armies[0].getUnit(0).moveTo(2, 5);
+    this.game_map.setOccupied(2, 5, true);
     this.armies[0].getUnit(0).setTracker(new UnitTracker());
     
     this.armies[0].getUnit(1).moveTo(4, 4);
+    this.game_map.setOccupied(4, 4, true);    
     this.armies[0].getUnit(1).setTracker(new UnitTracker());
     
     this.armies[0].getUnit(2).moveTo(7, 6);
+    this.game_map.setOccupied(7, 6, true);    
     this.armies[0].getUnit(2).setTracker(new UnitTracker());
 
     this.armies[1].getUnit(0).moveTo(12, 0);
+    this.game_map.setOccupied(12, 0, true);    
     this.armies[1].getUnit(0).setTracker(new UnitTracker());
     
     this.armies[1].getUnit(1).moveTo(10, 1);
+    this.game_map.setOccupied(10, 1, true);
     this.armies[1].getUnit(1).setTracker(new UnitTracker());
     
     this.armies[1].getUnit(2).moveTo(10, 3);
+    this.game_map.setOccupied(10, 3, true);
     this.armies[1].getUnit(2).setTracker(new UnitTracker());
     
     this.cur_team = 0;
@@ -99,7 +105,31 @@ Game.prototype.MoveCurrentUnit =
         unit.getTracker().moved = true;
         this.game_map.setOccupied(mx, my, true);
     }
+
+Game.prototype.isValidMove =
+    function (x, y)
+    {
+        var unit = this.getCurrentUnit();
+        return is_path_valid(unit.move, this, unit.x, unit.y, x, y);
+    }
+
+Game.prototype.enemyInTile =
+    function(x, y)
+    {
+        var ui = new UnitIterator(this.armies[(this.cur_team + 1) % this.num_teams]);
+        var unit;
     
+        while (ui.moveNext())
+        {
+            unit = ui.get();
+            if (unit.x == x && unit.y == y)
+            {
+                return true;
+            }       
+        }
+        return false;
+    }
+
 Game.prototype.attackWithCurrentUnit =
     function(target_id)
     {

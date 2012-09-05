@@ -91,7 +91,7 @@ function unit_select_click(evt)
 
             tile = g.getGameMap().getTile(mx, my);
 
-            if (g.getGameMap().isPassable(mx, my) && !g.getGameMap().isOccupied(mx, my))
+            if (g.getGameMap().isPassable(mx, my) && !g.getGameMap().isOccupied(mx, my) && g.isValidMove(mx, my))
             {
                 tile.sprite.setAttribute("fill", "rgb(128,255,128)");
                 tile.sprite.setAttribute("game_pos_x", poslist[posi].x);

@@ -46,7 +46,17 @@ HexMap.prototype.getTile =
         nx = this.getBufX(x);
         ny = this.getBufY(x, y);
 
-        return this.map[nx][ny];
+        try
+        {
+            return this.map[nx][ny];
+        }
+        catch(e)
+        {
+            console.log(x);
+            console.log(y);
+            console.log(nx);
+            console.log(ny);            
+        }
     }
 
 HexMap.prototype.validHex =
