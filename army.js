@@ -38,6 +38,19 @@ Army.prototype.removeUnit =
         this.num_units--;
     }
 
+
+Army.prototype.setTracker =
+    function(tracker)
+    {
+        this.tracker = tracker;
+    }
+
+Army.prototype.getTracker =
+    function()
+    {
+        return this.tracker;
+    }
+
 function UnitIterator(army)
 {
     this.army = army;
@@ -67,4 +80,4 @@ UnitIterator.prototype.moveNext =
         
         return true;
     }
-    
+

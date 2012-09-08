@@ -10,6 +10,30 @@ UnitTracker.prototype.reset =
         this.attacked = false;
     }
 
+function ArmyTracker()
+{
+    this.bases = 0;
+    this.reset();
+}
+
+ArmyTracker.prototype.reset =
+    function()
+    {
+        this.wits = 2 + this.bases;
+    }
+
+ArmyTracker.prototype.useWit =
+    function()
+    {
+        this.wits--;
+    }
+
+ArmyTracker.prototype.hasWits =
+    function()
+    {
+        return (this.wits > 0 ? true : false);
+    }
+
 function Game()
 {
     this.game_map = new GameMap(15, 11, sharkfood_island_map);
@@ -20,6 +44,9 @@ function Game()
     
     this.armies[0] = new Army("red", this);
     this.armies[1] = new Army("blue", this);
+    
+    this.armies[0].setTracker(new ArmyTracker());
+    this.armies[1].setTracker(new ArmyTracker());
     
     this.armies[0].getUnit(0).moveTo(2, 5);
     this.game_map.setOccupied(2, 5, true);
@@ -46,7 +73,7 @@ function Game()
     this.armies[1].getUnit(2).setTracker(new UnitTracker());
     
     this.cur_team = 0;
-    
+
     this.finished = false;
 }
 
@@ -64,6 +91,8 @@ Game.prototype.nextTurn =
             unit = ui.get();
             unit.getTracker().reset();
         }
+
+        this.getCurrentArmy().getTracker().reset();
     }
     
 Game.prototype.getGameMap =
@@ -99,16 +128,28 @@ Game.prototype.getCurrentUnit =
 Game.prototype.MoveCurrentUnit =
     function(mx, my)
     {
+        if (!this.getCurrentArmy().getTracker().hasWits())
+        {
+            return;
+        }
+
         var unit = this.getCurrentUnit();
         this.game_map.setOccupied(unit.x, unit.y, false);
         unit.moveTo(mx, my);
         unit.getTracker().moved = true;
         this.game_map.setOccupied(mx, my, true);
+
+        this.getCurrentArmy().getTracker().useWit();
     }
 
 Game.prototype.isValidMove =
     function (x, y)
     {
+        if (!this.getCurrentArmy().getTracker().hasWits())
+        {
+            return false;
+        }
+        
         var unit = this.getCurrentUnit();
         return is_path_valid(unit.move, this, unit.x, unit.y, x, y);
     }
@@ -133,6 +174,11 @@ Game.prototype.enemyInTile =
 Game.prototype.attackWithCurrentUnit =
     function(target_id)
     {
+        if (!this.getCurrentArmy().getTracker().hasWits())
+        {
+            return;
+        }
+        
         var unit = this.getCurrentUnit();
         var enemy = this.armies[(this.cur_team + 1) % this.num_teams];
         var target = enemy.getUnit(target_id);
@@ -153,4 +199,6 @@ Game.prototype.attackWithCurrentUnit =
         }        
         
         unit.getTracker().attacked = true;
+
+        this.getCurrentArmy().getTracker().useWit();
     }

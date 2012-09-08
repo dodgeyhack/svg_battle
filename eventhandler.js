@@ -12,7 +12,7 @@ EventHandlerTracker.prototype.addHandler =
         }
 
         object.setAttribute("onclick", handler);
-        object.setAttribute("fill", "white");
+        //object.setAttribute("fill", "white");
 
         this.groups[group].push(object);
     }
@@ -29,7 +29,7 @@ EventHandlerTracker.prototype.removeAll =
             while (undefined != (object = this.groups[i].pop()))
             {
                 object.removeAttribute("onclick");
-                object.setAttribute("fill", "pink");
+                //object.setAttribute("fill", "pink");
             }
             
             this.groups[i] = undefined;
@@ -44,6 +44,6 @@ EventHandlerTracker.prototype.removeAllFrom =
         while (undefined != (object = this.groups[group].pop()))
         {
             object.removeAttribute("onclick");
-            object.setAttribute("fill", "red");
+            //object.setAttribute("fill", "red");
         }
     }

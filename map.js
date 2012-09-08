@@ -124,14 +124,14 @@ function gamemap_get_fill(value)
 {
     switch(value)
     {
-        case 0: return "green";
-        case 1: return "blue";
-        case 2: return "gray";
-        case 3: return "white";
-        case 4: return "black";
-        case 5: return "rgb(220,220,220)";
-        case 6: return "rgb(35,35,35)";
-        case 7: return "cyan";
+        case 0: return "green"; // grass - passable
+        case 1: return "blue";  // water - impassable
+        case 2: return "gray";  // blocked - impassable
+        case 3: return "white"; // team 0 base
+        case 4: return "black"; // team 1 base
+        case 5: return "rgb(220,220,220)"; // team 0 spawn
+        case 6: return "rgb(35,35,35)"; // team 1 spawn
+        case 7: return "cyan"; // neutral objective
         default: return "yellow";
     }
 }
