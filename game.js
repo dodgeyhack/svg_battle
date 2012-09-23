@@ -12,14 +12,14 @@ UnitTracker.prototype.reset =
 
 function ArmyTracker()
 {
-    this.bases = 0;
+    this.objectives = 0;
     this.reset();
 }
 
 ArmyTracker.prototype.reset =
     function()
     {
-        this.wits = 2 + this.bases;
+        this.wits = 2 + this.objectives;
     }
 
 ArmyTracker.prototype.useWit =
@@ -36,7 +36,8 @@ ArmyTracker.prototype.hasWits =
 
 function Game()
 {
-    this.game_map = new GameMap(15, 11, sharkfood_island_map);
+    this.objectives = new ObjectiveStore();
+    this.game_map = new GameMap(15, 11, sharkfood_island_map, this.objectives);
 
     this.num_teams = 2;
     
@@ -106,6 +107,12 @@ Game.prototype.getCurrentArmy =
     {
         return this.armies[this.cur_team];
     }
+
+Game.prototype.getEnemyArmy =
+    function()
+    {
+        return this.armies[(this.cur_team + 1) % this.num_teams];
+    }
     
 Game.prototype.getEnemyUnitIterator =
     function()
@@ -134,12 +141,29 @@ Game.prototype.MoveCurrentUnit =
         }
 
         var unit = this.getCurrentUnit();
+
         this.game_map.setOccupied(unit.x, unit.y, false);
         unit.moveTo(mx, my);
         unit.getTracker().moved = true;
         this.game_map.setOccupied(mx, my, true);
 
         this.getCurrentArmy().getTracker().useWit();
+   
+        var objective = this.objectives.getObjective(mx, my);
+
+        if (objective !== undefined)
+        {
+            var enemy_army = this.getEnemyArmy();
+            var army = this.getCurrentArmy();
+
+            if (objective.owner == enemy_army.id)
+            {
+                enemy_army.getTracker().objectives--;
+            }
+            objective.setOwner(army.id);
+            army.getTracker().objectives++;
+            console.log("Took objective");
+        }
     }
 
 Game.prototype.isValidMove =

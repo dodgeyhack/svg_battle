@@ -1,12 +1,21 @@
 var hex_size = 30;
 
+var TILE_GRASS = 0;
+var TILE_WATER = 1;
+var TILE_OBSTACLE = 2;
+var TILE_BASE0 = 3;
+var TILE_BASE1 = 4;
+var TILE_SPAWN0 = 5;
+var TILE_SPAWN1 = 6;
+var TILE_OBJECTIVE = 7;
+
 /*
  * Game co-ordinates are organised in the following manner to give a straight
  * x and y axis. 
  * This aids in distance and path-finding calculations.
  * http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
  */
-function GameMap(width, height, map_data)
+function GameMap(width, height, map_data, objectives)
 {
     GameMap.baseConstructor.call(this, width, height);
     
@@ -23,10 +32,14 @@ function GameMap(width, height, map_data)
             else
             {
                 map_obj.tile_type = map_data[y][x];
+            
+                if (map_obj.tile_type == TILE_OBJECTIVE)
+                {
+                    objectives.addObjective(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y));
+                }
             }
             
             map_obj.occupied = false;
-
             map_obj.sprite = create_hexagon(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y), hex_size, gamemap_get_fill(map_obj.tile_type));
                 
             this.map[x][y] = map_obj;
@@ -55,7 +68,8 @@ GameMap.prototype.redraw =
         {
             for (var x = 0; x < this.width; x++)        
             {
-                this.map[x][y].sprite.setAttribute("fill", gamemap_get_fill(this.map[x][y].tile_type));
+                var tile = this.map[x][y];
+                tile.sprite.setAttribute("fill", gamemap_get_fill(tile.tile_type));
             }
         }
     }
@@ -98,7 +112,7 @@ GameMap.prototype.isPassable =
         
         var v = tile.tile_type;
         
-        if (v === 0 || v === 5 || v === 6 || v === 7)
+        if (v === TILE_GRASS || v === TILE_SPAWN0 || v === TILE_SPAWN1 || v === TILE_OBJECTIVE)
         {
             return true;
         }

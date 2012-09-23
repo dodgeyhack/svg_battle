@@ -1,3 +1,5 @@
+var _next_army_id = 0;
+
 function Army(colour, game)
 {
     this.colour = colour;
@@ -8,6 +10,9 @@ function Army(colour, game)
     this.units[2] = new Unit(2, new Sprite("runner", colour), 5, 1, 1, game);
     
     this.num_units = 3;
+
+    this.id = _next_army_id;
+    _next_army_id++;
 }
 
 Army.prototype.getUnit =

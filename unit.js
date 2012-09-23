@@ -1,11 +1,10 @@
 function Unit(id, sprite, move, health, damage, game)
 {
+    Unit.baseConstructor.call(this, 0, 0, sprite);
+    
     this.game = game;
 
     this.id = id;
-    this.sprite = sprite;
-    this.x = 0;
-    this.y = 0;
     this.move = move;
     this.max_health = health;
     this.health = health;
@@ -26,20 +25,23 @@ function Unit(id, sprite, move, health, damage, game)
     }
 }
 
+KevLinDev.extend(Unit, RenderMapObject)
+
 Unit.prototype.updateSprite =
     function()
     {
         this.sprite.changeText(this.health);
     }
+    
 
 Unit.prototype.destroy =
     function()
     {
         this.sprite.destroy();
         /* release any references so garbage collector can do it's thing */
-        delete this.sprite;
         delete this.tracker;
         delete this.game;
+        delete this.sprite;        
     }
 
 Unit.prototype.setTracker =

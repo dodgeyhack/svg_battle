@@ -28,6 +28,16 @@ function HexMap(width, height)
     }
 }
 
+function hexmap_get_map_coord_x(buf_x)
+{
+    return buf_x;
+}
+
+function hexmap_get_map_coord_y(buf_x, buf_y)
+{
+    return buf_y - Math.floor(buf_x / 2);
+}
+
 HexMap.prototype.getBufX =
     function(x)
     {
