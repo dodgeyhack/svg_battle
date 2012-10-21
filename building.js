@@ -1,8 +1,8 @@
 function Building(x, y, size, health, owner, sprite)
 {
-    GameMap.baseConstructor.call(this, x, y, sprite);
+    Building.baseConstructor.call(this, x, y, sprite);
 
-    this.size = size;
+    this.size = size - 1;
     this.owner = owner;
     this.health = health;
 }
@@ -24,7 +24,7 @@ Building.prototype.isDead =
 Building.prototype.inBuilding =
     function(x, y)
     {
-        if (Math.abs(x - this.x) <= this.size && Math.abs(y - this.y) <= this.size)
+        if (hexmap_distance(x, y, this.x, this.y) <= this.size)
         {
             return true;
         }

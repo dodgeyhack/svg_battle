@@ -15,7 +15,7 @@ var TILE_OBJECTIVE = 7;
  * This aids in distance and path-finding calculations.
  * http://keekerdc.com/2011/03/hexagon-grids-coordinate-systems-and-distance-calculations/
  */
-function GameMap(width, height, map_data, objectives)
+function GameMap(width, height, map_data, objectives, buildings)
 {
     GameMap.baseConstructor.call(this, width, height);
     
@@ -36,6 +36,14 @@ function GameMap(width, height, map_data, objectives)
                 if (map_obj.tile_type == TILE_OBJECTIVE)
                 {
                     objectives.addObjective(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y));
+                }
+                else if (map_obj.tile_type == TILE_BASE0)
+                {
+                    buildings.addBuilding(new Building(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y), 2, 5, 0, undefined));
+                }
+                else if (map_obj.tile_type == TILE_BASE1)
+                {
+                    buildings.addBuilding(new Building(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y), 1, 5, 1, undefined));
                 }
             }
             

@@ -37,7 +37,8 @@ ArmyTracker.prototype.hasWits =
 function Game()
 {
     this.objectives = new ObjectiveStore();
-    this.game_map = new GameMap(15, 11, sharkfood_island_map, this.objectives);
+    this.buildings = new BuildingStore();
+    this.game_map = new GameMap(15, 11, sharkfood_island_map, this.objectives, this.buildings);
 
     this.num_teams = 2;
     
@@ -170,6 +171,11 @@ Game.prototype.isValidMove =
     function (x, y)
     {
         if (!this.getCurrentArmy().getTracker().hasWits())
+        {
+            return false;
+        }
+
+        if (this.buildings.isBuilding(x, y))
         {
             return false;
         }
