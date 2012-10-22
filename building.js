@@ -5,6 +5,9 @@ function Building(x, y, size, health, owner, sprite)
     this.size = size - 1;
     this.owner = owner;
     this.health = health;
+
+    this.sprite.setPosition(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y));
+    this.sprite.setText(this.health);
 }
 
 KevLinDev.extend(Building, RenderMapObject)
@@ -13,6 +16,7 @@ Building.prototype.takeDamage =
     function(dmg)
     {
         this.health -= dmg;
+        this.sprite.updateText(this.health);
     }
 
 Building.prototype.isDead =

@@ -65,7 +65,7 @@ Unit.prototype.moveTo =
         /*
          * While it's probably ok to have a global game map, I'd prefer not to.
          */
-        this.sprite.setPosition(this.game.getGameMap().getMapScreenX(x), this.game.getGameMap().getMapScreenY(x, y));
+        this.sprite.setPosition(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y));
     }
 
 Unit.prototype.healOther =

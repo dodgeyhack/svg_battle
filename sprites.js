@@ -21,6 +21,13 @@ function Sprite(type, colour)
             create_triangle(this.svg_object, 0, 0, hex_size / 3, this.fill);
         }
 
+    this._constructor_building =
+        function()
+        {
+            this.svg_object = create_group(mySvg);
+            create_triangle(this.svg_object, 0, 0, hex_size * 3, this.fill);
+        }
+
     this.fill = colour;
     this.text_object = null;
 
@@ -29,11 +36,13 @@ function Sprite(type, colour)
         case "heavy": this._constructor_heavy(); break;
         case "soldier": this._constructor_soldier(); break;
         case "runner": this._constructor_runner(); break;
+        case "building" : this._constructor_building(); break;
     }
 
     this.setPosition =
         function(x, y)
         {
+            console.log("placing sprite at ("+x+","+y+")");
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
         }
         

@@ -37,18 +37,34 @@ function GameMap(width, height, map_data, objectives, buildings)
                 {
                     objectives.addObjective(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y));
                 }
-                else if (map_obj.tile_type == TILE_BASE0)
+                else if (map_obj.tile_type == TILE_BASE0 || map_obj.tile_type == TILE_BASE1)
                 {
-                    buildings.addBuilding(new Building(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y), 2, 5, 0, undefined));
-                }
-                else if (map_obj.tile_type == TILE_BASE1)
-                {
-                    buildings.addBuilding(new Building(hexmap_get_map_coord_x(x), hexmap_get_map_coord_y(x, y), 1, 5, 1, undefined));
+                    /* 0 or 1 depending on team */
+                    var owner = map_obj.tile_type - TILE_BASE0;
+                    console.log(x);
+                    console.log(y);
+                    buildings.addBuilding
+                    (
+                        new Building
+                        (
+                            hexmap_get_map_coord_x(x),
+                            hexmap_get_map_coord_y(x, y),
+                            2,
+                            5,
+                            owner,
+                            new Sprite("building", owner == 0 ? "red" : "blue")
+                        )
+                    );
+
+                    map_obj.tile_type = TILE_GRASS;
                 }
             }
             
+            var mx = hexmap_get_map_coord_x(x);
+            var my = hexmap_get_map_coord_y(x, y);
+
             map_obj.occupied = false;
-            map_obj.sprite = create_hexagon(gamemap_get_map_screenx(x), gamemap_get_map_screeny(x, y), hex_size, gamemap_get_fill(map_obj.tile_type));
+            map_obj.sprite = create_hexagon(gamemap_get_map_screenx(mx), gamemap_get_map_screeny(mx, my), hex_size, gamemap_get_fill(map_obj.tile_type));
                 
             this.map[x][y] = map_obj;
         }
@@ -175,6 +191,7 @@ function gamemap_get_map_screenx(x)
 
 function gamemap_get_map_screeny(x, y)
 {
-    var v = (gamemap_get_hex_yoffset(hex_size) + (y * gamemap_get_hex_yoffset(hex_size)) + (y + (x % 2)) * (gamemap_get_hex_yoffset(hex_size)));
+    var my = hexmap_get_bufy(x, y); 
+    var v = (gamemap_get_hex_yoffset(hex_size) + (my * gamemap_get_hex_yoffset(hex_size)) + (my + (x % 2)) * (gamemap_get_hex_yoffset(hex_size)));
     return v;
 }

@@ -53,7 +53,6 @@ function set_unit_attack_event_handlers()
             tile.sprite.setAttribute("game_attack_unit_id", enemy.getId());
             event_handlers.addHandler("unit", tile.sprite, "unit_attack_click(evt)");
         }
-        
     }
 }
 

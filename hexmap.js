@@ -145,3 +145,15 @@ HexMap.prototype.getSurroundingR =
         rlist.length = rlist_index;
         return rlist;
     }
+
+
+function hexmap_get_bufx(x)
+{
+    return x;
+}
+
+function hexmap_get_bufy(x, y)
+{
+    return y + Math.floor(x / 2);
+}
+   

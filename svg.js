@@ -21,7 +21,7 @@ function create_hexagon(x, y, r, fill)
     );
     hex.setAttributeNS(null, "fill", fill);
     hex.setAttributeNS(null, "stroke", "black");
-
+    hex.setAttributeNS(null, "opacity", "0.5");
     mySvg.appendChild(hex);
     
     return hex;

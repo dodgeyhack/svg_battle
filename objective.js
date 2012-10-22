@@ -8,7 +8,6 @@ ObjectiveStore.prototype.addObjective =
     {
         var obj = new Objective(x, y);
         this.store.push(obj);
-        console.log("Created objective at ("+x+","+y+")");
     }
 
 ObjectiveStore.prototype.getObjective =
