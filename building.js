@@ -16,7 +16,7 @@ Building.prototype.takeDamage =
     function(dmg)
     {
         this.health -= dmg;
-        this.sprite.updateText(this.health);
+        this.sprite.changeText(this.health);
     }
 
 Building.prototype.isDead =
@@ -70,3 +70,45 @@ BuildingStore.prototype.getBuilding =
 
         return undefined;
     }
+
+BuildingStore.prototype.getBuildingList =
+    function()
+    {
+        return this.store;
+    }
+
+
+function BuildingIterator(building_store, ignore_army=undefined)
+{
+    this.building_store = building_store.store;
+    this.ignore_army = ignore_army;
+    this.current = -1;
+}
+
+BuildingIterator.prototype.get =
+    function()
+    {
+        return this.building_store[this.current];
+    }
+    
+BuildingIterator.prototype.moveNext =
+    function()
+    {
+        console.log(this.current);
+        this.current += 1;
+
+        while (this.current < this.building_store.length && this.building_store[this.current].owner == this.ignore_army)
+        {
+            this.current += 1;
+        }
+
+        if (this.current >= this.building_store.length)
+        {
+            console.log(this.current);
+            console.log(this.building_store.length);
+            return false;
+        }
+        
+        console.log("success!");
+        return true;
+    } 

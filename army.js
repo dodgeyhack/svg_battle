@@ -28,7 +28,7 @@ Army.prototype.addUnit =
         
         if (this.units.length < (id - 1))
         {
-            this.units.length = id;
+            this.units.length = id;changeText
         }
         
         this.units[id] = unit;

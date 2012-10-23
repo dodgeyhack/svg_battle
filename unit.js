@@ -87,6 +87,12 @@ Unit.prototype.doDamage =
         other_unit.takeDamage(this.damage);
     }
 
+Unit.prototype.doDamageToBuilding =
+    function(building)
+    {
+        building.takeDamage(this.damage);
+    }
+
 Unit.prototype.takeDamage =
     function(damage)
     {

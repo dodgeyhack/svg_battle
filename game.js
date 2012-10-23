@@ -114,6 +114,12 @@ Game.prototype.getEnemyArmy =
     {
         return this.armies[(this.cur_team + 1) % this.num_teams];
     }
+
+Game.prototype.getEnemyBuildingIterator =
+    function()
+    {
+        return new BuildingIterator(this.buildings, this.cur_team);
+    }
     
 Game.prototype.getEnemyUnitIterator =
     function()
@@ -231,4 +237,21 @@ Game.prototype.attackWithCurrentUnit =
         unit.getTracker().attacked = true;
 
         this.getCurrentArmy().getTracker().useWit();
+    }
+
+Game.prototype.attackBuildingWithCurrentUnit =
+    function(building_x, building_y)
+    {
+        var building = this.buildings.getBuilding(building_x, building_y);
+        var unit = this.getCurrentUnit();
+
+        unit.doDamageToBuilding(building);
+
+        if (building.isDead())
+        {
+            console.log("Building is dead, how sad =( ");
+            /* Should do something here */
+        }
+
+        this.getCurrentArmy.getTracker().useWit();
     }
