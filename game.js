@@ -249,9 +249,9 @@ Game.prototype.attackBuildingWithCurrentUnit =
 
         if (building.isDead())
         {
-            console.log("Building is dead, how sad =( ");
+            console.log("Building is dead, how sad =[ ");
             /* Should do something here */
         }
 
-        this.getCurrentArmy.getTracker().useWit();
+        this.getCurrentArmy().getTracker().useWit();
     }

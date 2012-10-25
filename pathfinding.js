@@ -116,7 +116,7 @@ function is_path_valid(max_dist, game, start_x, start_y, dest_x, dest_y)
 
         current_tile.closed = true;
 
-        adj_list = map.getSurroundingR(current_tile.x, current_tile.y, 1);
+        adj_list = game.getGameMap().getSurroundingHex(current_tile.x, current_tile.y, 1);
         
         for (i = 0; i < adj_list.length; i++)
         {

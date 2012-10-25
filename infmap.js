@@ -14,7 +14,7 @@ function InfluenceMap(gamemap, unit, friends, enemies)
         }
     }
     
-    poslist = this.getSurroundingR(unit.x, unit.y, unit.move);
+    poslist = hexmap_get_surrounding_r(unit.x, unit.y, unit.move);
     
     for (var posi = 0; posi < poslist.length; posi++)
     {
@@ -43,10 +43,10 @@ function InfluenceMap(gamemap, unit, friends, enemies)
     for (var i = 0; i < enemies.length; i++)
     {
     
-        this.map[this.getBufX(enemies[i].x)][this.getBufY(enemies[i].y)] = -255;
+        this.map[hexmap_get_bufx(enemies[i].x)][hexmap_get_bufy(enemies[i].y)] = -255;
         
         
-        var l = game_map.getSurroundingR(enemies[i].x, enemies[i].y, 1);
+        var l = hexmap_get_surrounding_r(enemies[i].x, enemies[i].y, 1);
 
         // in squares where I could take damage, subtract that damage
         for (var j = 0; j < l.length; j++)

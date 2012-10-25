@@ -42,7 +42,6 @@ function Sprite(type, colour)
     this.setPosition =
         function(x, y)
         {
-            console.log("placing sprite at ("+x+","+y+")");
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
         }
         

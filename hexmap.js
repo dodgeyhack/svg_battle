@@ -10,6 +10,26 @@ function hexmap_distance(ox, oy, x, y)
     return Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
 }
 
+function hexmap_get_map_coord_x(buf_x)
+{
+    return buf_x;
+}
+
+function hexmap_get_map_coord_y(buf_x, buf_y)
+{
+    return buf_y - Math.floor(buf_x / 2);
+}
+
+function hexmap_get_bufx(x)
+{
+    return x;
+}
+
+function hexmap_get_bufy(x, y)
+{
+    return y + Math.floor(x / 2);
+}
+
 /*
  * Map co-ordinates are organised in the following manner to give a straight
  * x and y axis. 
@@ -27,34 +47,12 @@ function HexMap(width, height)
         this.map[x] = new Array(height);
     }
 }
-
-function hexmap_get_map_coord_x(buf_x)
-{
-    return buf_x;
-}
-
-function hexmap_get_map_coord_y(buf_x, buf_y)
-{
-    return buf_y - Math.floor(buf_x / 2);
-}
-
-HexMap.prototype.getBufX =
-    function(x)
-    {
-        return x;
-    }
-
-HexMap.prototype.getBufY =
-    function(x, y)
-    {
-        return y + Math.floor(x / 2);
-    }
     
 HexMap.prototype.getTile =
     function(x, y)
     {
-        nx = this.getBufX(x);
-        ny = this.getBufY(x, y);
+        nx = hexmap_get_bufx(x);
+        ny = hexmap_get_bufy(x, y);
 
         try
         {
@@ -72,8 +70,8 @@ HexMap.prototype.getTile =
 HexMap.prototype.validHex =
     function(x, y)
     {
-        bufx = this.getBufX(x);
-        bufy = this.getBufY(x, y);
+        bufx = hexmap_get_bufx(x);
+        bufy = hexmap_get_bufy(x, y);
 
         if (bufx < 0 || bufx >= this.width || bufy < 0 || bufy >= this.height)
         {
@@ -97,10 +95,11 @@ HexMap.prototype._select_hex =
 
         return list_index + 1;
     }
-    
-HexMap.prototype.getSurroundingR =
+
+HexMap.prototype.getSurroundingHex =
     function(x, y, r)
     {
+        var i;
         var minX = x - r;
         var maxX = x + r;
 
@@ -117,7 +116,7 @@ HexMap.prototype.getSurroundingR =
         var rlist = Array(rlist_max);
         var rlist_index = 0;
 
-        for (var i = minX; i <= maxX; i++)
+        for (i = minX; i <= maxX; i++)
         {
             /* don't add the center hex */
             if (!(i == x))
@@ -128,7 +127,7 @@ HexMap.prototype.getSurroundingR =
 
         for (j = r; j > 0; j --)
         {
-            for (var i = minX; i <= maxX; i++)
+            for (i = minX; i <= maxX; i++)
             {
                 if (hexmap_distance(x, y, i, y + j) <= r)
                 {
@@ -145,15 +144,3 @@ HexMap.prototype.getSurroundingR =
         rlist.length = rlist_index;
         return rlist;
     }
-
-
-function hexmap_get_bufx(x)
-{
-    return x;
-}
-
-function hexmap_get_bufy(x, y)
-{
-    return y + Math.floor(x / 2);
-}
-   

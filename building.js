@@ -1,7 +1,8 @@
-function Building(x, y, size, health, owner, sprite)
+function Building(x, y, size, health, owner, map, sprite)
 {
     Building.baseConstructor.call(this, x, y, sprite);
 
+    this.map = map;
     this.size = size - 1;
     this.owner = owner;
     this.health = health;
@@ -35,6 +36,11 @@ Building.prototype.inBuilding =
         return false;
     }
 
+Building.prototype.getBuildingTiles =
+    function()
+    {
+        return this.map.getSurroundingHex(this.x, this.y, this.size);
+    }
 
 function BuildingStore()
 {
@@ -77,7 +83,6 @@ BuildingStore.prototype.getBuildingList =
         return this.store;
     }
 
-
 function BuildingIterator(building_store, ignore_army=undefined)
 {
     this.building_store = building_store.store;
@@ -94,7 +99,6 @@ BuildingIterator.prototype.get =
 BuildingIterator.prototype.moveNext =
     function()
     {
-        console.log(this.current);
         this.current += 1;
 
         while (this.current < this.building_store.length && this.building_store[this.current].owner == this.ignore_army)
@@ -104,11 +108,8 @@ BuildingIterator.prototype.moveNext =
 
         if (this.current >= this.building_store.length)
         {
-            console.log(this.current);
-            console.log(this.building_store.length);
             return false;
         }
         
-        console.log("success!");
         return true;
     } 

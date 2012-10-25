@@ -55,9 +55,11 @@ function set_unit_attack_event_handlers()
     
     var enemy_iter = g.getEnemyUnitIterator();
     var enemy;
-   
-    /* TODO: Need to check if we have wits available */
 
+    if (!g.getCurrentArmy().getTracker().hasWits())
+    {
+        return;
+    }
 
     while (enemy_iter.moveNext())
     {
@@ -78,15 +80,19 @@ function set_unit_attack_event_handlers()
     while (building_iter.moveNext())
     {
         building = building_iter.get();
-        console.log("building at "+hexmap_distance(unit.x, unit.y, building.x, building.y));
         if (hexmap_distance(unit.x, unit.y, building.x, building.y) < (2 + building.size))
         {
-            var tile = g.getGameMap().getTile(building.x, building.y);
-            tile.sprite.setAttribute("fill", "rgb(128,0,0)");
-            
-            tile.sprite.setAttribute("game_attack_building_x", building.x);
-            tile.sprite.setAttribute("game_attack_building_y", building.y);
-            event_handlers.addHandler("unit", tile.sprite, "building_attack_click(evt)");
+            var tile_list = building.getBuildingTiles();
+            var tile_i;
+
+            for (tile_i = 0; tile_i < tile_list.length; tile_i++)
+            {
+                var tile = g.getGameMap().getTile(tile_list[tile_i].x, tile_list[tile_i].y);
+                tile.sprite.setAttribute("fill", "rgb(128,0,0)");
+                tile.sprite.setAttribute("game_attack_building_x", building.x);
+                tile.sprite.setAttribute("game_attack_building_y", building.y);
+                event_handlers.addHandler("unit", tile.sprite, "building_attack_click(evt)");
+            }
         }
     }
 }
@@ -114,7 +120,7 @@ function unit_select_click(evt)
     
     if (!cur_unit_tracker.moved)
     {
-        var poslist = g.getGameMap().getSurroundingR(cur_unit.x, cur_unit.y, cur_unit.move);
+        var poslist = g.getGameMap().getSurroundingHex(cur_unit.x, cur_unit.y, cur_unit.move);
 
         var posi;
 

@@ -41,8 +41,7 @@ function GameMap(width, height, map_data, objectives, buildings)
                 {
                     /* 0 or 1 depending on team */
                     var owner = map_obj.tile_type - TILE_BASE0;
-                    console.log(x);
-                    console.log(y);
+
                     buildings.addBuilding
                     (
                         new Building
@@ -52,6 +51,7 @@ function GameMap(width, height, map_data, objectives, buildings)
                             2,
                             5,
                             owner,
+                            this,
                             new Sprite("building", owner == 0 ? "red" : "blue")
                         )
                     );
@@ -114,19 +114,6 @@ GameMap.prototype.dump =
             console.log(line)
         }
         console.log("------------------------------------------------");
-    }
-    
-GameMap.prototype.getMapScreenX =
-    function(x)
-    {
-        return gamemap_get_map_screenx(this.getBufX(x));
-    }
-        
-GameMap.prototype.getMapScreenY =
-    function(x, y)
-    {
-        var v = gamemap_get_map_screeny(x, this.getBufY(x, y));
-        return v;
     }
 
 GameMap.prototype.isPassable =

@@ -13,11 +13,8 @@ ObjectiveStore.prototype.addObjective =
 ObjectiveStore.prototype.getObjective =
     function(x, y)
     {
-        var i;
-        console.log(this.store.length);
-        for (i = 0; i < this.store.length; i++)
+        for (var i = 0; i < this.store.length; i++)
         {
-            console.log("testing ("+x+","+y+") against ("+this.store[i].x+","+this.store[i].y+")");
             if (this.store[i].x == x && this.store[i].y == y)
             {
                 return this.store[i];
