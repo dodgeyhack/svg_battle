@@ -1,13 +1,15 @@
-function create_hexagon(x, y, r, fill)
+function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
 {
     x1 = Math.sin(Math.PI/6) * r;
     y1 = Math.cos(Math.PI/6) * r;
 
     x2 = r;
     y2 = 0;
+    
+    var g = create_group(mySvg);
 
     var hex = document.createElementNS(svgns, "polygon");
-
+    
     hex.setAttributeNS
     (
         null,
@@ -21,10 +23,74 @@ function create_hexagon(x, y, r, fill)
     );
     hex.setAttributeNS(null, "fill", fill);
     hex.setAttributeNS(null, "stroke", "black");
-    hex.setAttributeNS(null, "opacity", "0.5");
-    mySvg.appendChild(hex);
+    g.appendChild(hex);
     
+    if (edge1)
+    {
+        var bit_1 = document.createElementNS(svgns, "polygon");
+        bit_1.setAttributeNS
+        (
+            null,
+            "points",
+            (x - x2) + "," + (y + y2) + " " +
+            (x - x1) + "," + (y + y1) + " " +
+            (x - x1) + "," + (y + y1 + hex_3d_depth) + " " +
+            (x - x2) + "," + (y + y2 + hex_3d_depth)
+        );
+        bit_1.setAttributeNS(null, "fill", fill);
+        bit_1.setAttributeNS(null, "stroke", "black");
+        g.appendChild(bit_1);
+    }
+    
+    if (edge2)
+    {
+        var bit_2 = document.createElementNS(svgns, "polygon");
+        bit_2.setAttributeNS
+        (
+            null,
+            "points",
+            (x - x1) + "," + (y + y1) + " " +
+            (x + x1) + "," + (y + y1) + " " +
+            (x + x1) + "," + (y + y1 + hex_3d_depth) + " " +
+            (x - x1) + "," + (y + y1 + hex_3d_depth)
+        );
+        bit_2.setAttributeNS(null, "fill", fill);
+        bit_2.setAttributeNS(null, "stroke", "black");
+        g.appendChild(bit_2);
+    }
+    
+    if (edge3)
+    {
+        var bit_3 = document.createElementNS(svgns, "polygon");
+        bit_3.setAttributeNS
+        (
+            null,
+            "points",
+            (x + x1) + "," + (y + y1) + " " +
+            (x + x2) + "," + (y + y2) + " " +
+            (x + x2) + "," + (y + y2 + hex_3d_depth) + " " +
+            (x + x1) + "," + (y + y1 + hex_3d_depth)
+        );
+        bit_3.setAttributeNS(null, "fill", fill);
+        bit_3.setAttributeNS(null, "stroke", "black");
+        g.appendChild(bit_3);
+    }
+
     return hex;
+}
+
+function create_image(parent, x, y, file, width_mul=1, height_mul=1)
+{
+    var img = document.createElementNS(svgns, "image");
+    img.setAttribute("pointer-events", "none");
+    img.setAttribute("width", "" + (60 * width_mul));
+    img.setAttribute("height", "" + (60 * height_mul));
+    img.setAttribute("x", x);
+    img.setAttribute("y", y);
+    img.setAttribute("transform", "translate("+(-30*width_mul)+","+(-30*height_mul)+")");
+    img.setAttributeNS(xlinkns, "href", "assets/"+file);
+    parent.appendChild(img);
+    return img;
 }
 
 function create_triangle(parent, x, y, size, fill)
@@ -42,6 +108,7 @@ function create_triangle(parent, x, y, size, fill)
     );
     tri.setAttributeNS(null, "fill", fill);
     tri.setAttributeNS(null, "stroke", "black");
+    tri.setAttribute("pointer-events", "none");
 
     parent.appendChild(tri);
     

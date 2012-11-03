@@ -39,6 +39,15 @@ function Game()
     this.objectives = new ObjectiveStore();
     this.buildings = new BuildingStore();
     this.game_map = new GameMap(15, 11, sharkfood_island_map, this.objectives, this.buildings);
+    
+    var building_iter = new BuildingIterator(this.buildings);
+    var building;
+
+    while (building_iter.moveNext())
+    {
+        building = building_iter.get();
+        building.setSprite(new Sprite("building", building.owner == 0 ? "red" : "blue"));
+    }
 
     this.num_teams = 2;
     

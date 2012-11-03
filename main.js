@@ -1,4 +1,5 @@
 var svgns = "http://www.w3.org/2000/svg";
+var xlinkns = "http://www.w3.org/1999/xlink";
 var mySvg;
 
 var g;
@@ -213,9 +214,13 @@ function main()
     var container = document.getElementById("svgContainer");
     mySvg = document.createElementNS(svgns, "svg");
     mySvg.setAttribute("viewBox", "0 0 1280 700");
-    mySvg.setAttribute("version", "1.2");
-    mySvg.setAttribute("baseProfile", "tiny");
+    mySvg.setAttribute("version", "1.1");
+    
+    //mySvg.setAttribute("baseProfile", "tiny");
     container.appendChild(mySvg);
+    
+    create_rect(mySvg, 0, 0, 30*24, 30*22, "#2A7FFF")
+
 
     g = new Game();
     

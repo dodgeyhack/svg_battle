@@ -4,28 +4,28 @@ function Sprite(type, colour)
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, hex_size, this.fill);
+            create_image(this.svg_object, 0, 0, "heavy.svg");
         }
 
     this._constructor_soldier =
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, hex_size / 3 * 2, this.fill);
+            create_image(this.svg_object, 0, 0, "spearman.svg");
         }
 
     this._constructor_runner =
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, hex_size / 3, this.fill);
+            create_image(this.svg_object, 0, 0, "runner.svg");
         }
 
     this._constructor_building =
         function()
         {
             this.svg_object = create_group(mySvg);
-            create_triangle(this.svg_object, 0, 0, hex_size * 3, this.fill);
+            create_image(this.svg_object, 0, 0, "tower.svg", 3, 3);
         }
 
     this.fill = colour;
@@ -42,6 +42,7 @@ function Sprite(type, colour)
     this.setPosition =
         function(x, y)
         {
+            console.log("setPosition( "+x+","+y+")");
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
         }
         
