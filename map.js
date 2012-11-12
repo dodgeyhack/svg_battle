@@ -90,7 +90,7 @@ function GameMap(width, height, map_data, objectives, buildings)
             }
             else if (map_obj.tile_type == TILE_OBSTACLE)
             {
-                map_obj.sprite_over = create_image(mySvg, gamemap_get_map_screenx(mx), gamemap_get_map_screeny(mx, my), "template2.svg");
+                map_obj.sprite_over = create_image(mySvg, gamemap_get_map_screenx(mx), gamemap_get_map_screeny(mx, my), "forest.svg", 1.5, 1.5);
             }
             else if (map_obj.tile_type == TILE_BASE0 || map_obj.tile_type == TILE_BASE1)
             {

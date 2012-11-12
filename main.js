@@ -65,7 +65,7 @@ function set_unit_attack_event_handlers()
     while (enemy_iter.moveNext())
     {
         enemy = enemy_iter.get();
-        if (hexmap_distance(unit.x, unit.y, enemy.x, enemy.y) < 2)
+        if (hexmap_distance(unit.x, unit.y, enemy.x, enemy.y) <= unit.range)
         {
             var tile = g.getGameMap().getTile(enemy.x, enemy.y);
             tile.sprite.setAttribute("fill", "rgb(128,0,0)");

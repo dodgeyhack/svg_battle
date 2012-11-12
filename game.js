@@ -71,6 +71,10 @@ function Game()
     this.game_map.setOccupied(7, 6, true);    
     this.armies[0].getUnit(2).setTracker(new UnitTracker());
 
+    this.armies[0].getUnit(3).moveTo(6, 6);
+    this.game_map.setOccupied(6, 6, true);    
+    this.armies[0].getUnit(3).setTracker(new UnitTracker());
+
     this.armies[1].getUnit(0).moveTo(12, 0);
     this.game_map.setOccupied(12, 0, true);    
     this.armies[1].getUnit(0).setTracker(new UnitTracker());
@@ -82,7 +86,11 @@ function Game()
     this.armies[1].getUnit(2).moveTo(10, 3);
     this.game_map.setOccupied(10, 3, true);
     this.armies[1].getUnit(2).setTracker(new UnitTracker());
-    
+
+    this.armies[1].getUnit(3).moveTo(11, 3);
+    this.game_map.setOccupied(11, 3, true);
+    this.armies[1].getUnit(3).setTracker(new UnitTracker());
+
     this.cur_team = 0;
 
     this.finished = false;

@@ -21,6 +21,13 @@ function Sprite(type, colour)
             create_image(this.svg_object, 0, 0, "runner.svg");
         }
 
+    this._constructor_archer =
+        function()
+        {
+            this.svg_object = create_group(mySvg);
+            create_image(this.svg_object, 0, 0, "archer.svg");
+        }
+
     this._constructor_building =
         function()
         {
@@ -36,13 +43,13 @@ function Sprite(type, colour)
         case "heavy": this._constructor_heavy(); break;
         case "soldier": this._constructor_soldier(); break;
         case "runner": this._constructor_runner(); break;
+        case "archer": this._constructor_archer(); break;
         case "building" : this._constructor_building(); break;
     }
 
     this.setPosition =
         function(x, y)
         {
-            console.log("setPosition( "+x+","+y+")");
             this.svg_object.setAttributeNS(null, "transform", "translate("+x+","+y+")");
         }
         
