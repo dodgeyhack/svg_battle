@@ -24,6 +24,8 @@ function GameMap(width, height, map_data, objectives, buildings)
     var y;
     var map_obj;
     
+    var map_group = create_shadow_group(mySvg);
+    
     /* Build up the data map */
     for (x = 0; x < width; x++)
     {
@@ -65,6 +67,7 @@ function GameMap(width, height, map_data, objectives, buildings)
                 map_obj.sprite = 
                     create_hexagon
                     (
+                        map_group,
                         gamemap_get_map_screenx(mx),
                         gamemap_get_map_screeny(mx, my),
                         hex_size,
@@ -234,11 +237,11 @@ function gamemap_get_fill(value)
     {
         case 0: return "#217821"; // grass - passable
         case 1: return "blue";  // water - impassable
-        case 2: return "165016";  // blocked - impassable
+        case 2: return "#165016";  // blocked - impassable
         case 3: return "800000"; // team 0 base
         case 4: return "#000080"; // team 1 base
         case 5: return "#800000"; // team 0 spawn
-        case 6: return "000080"; // team 1 spawn
+        case 6: return "#000080"; // team 1 spawn
         case 7: return "#2CA02C"; // neutral objective
         default: return "yellow";
     }

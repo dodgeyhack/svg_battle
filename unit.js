@@ -1,7 +1,10 @@
 function Unit(id, sprite, move, health, damage, range, game)
 {
     Unit.baseConstructor.call(this, 0, 0, sprite);
-    
+/*
+    var col_elem = this.sprite.svg_object.getElementById("team_col");
+    col_elem.setAttribute("fill", "white");
+*/
     this.game = game;
 
     this.id = id;

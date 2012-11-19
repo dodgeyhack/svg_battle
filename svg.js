@@ -1,4 +1,79 @@
-function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
+function create_drop_shadow_filter(parent, name)
+{
+    var f = document.createElementNS(svgns, "filter");
+    f.setAttribute("id", name);
+    f.setAttribute("x", "-100%");
+    f.setAttribute("y", "-100%");
+    f.setAttribute("width", "300%");
+    f.setAttribute("height", "300%");
+    
+    var blur = document.createElementNS(svgns, "feGaussianBlur");
+    blur.setAttribute("result", "blurOut");
+    blur.setAttribute("stdDeviation", "10");
+
+    var offset = document.createElementNS(svgns, "feOffset");
+    offset.setAttribute("dx", "-4");
+    offset.setAttribute("dy", "4");
+    offset.setAttribute("in", "blurOut");
+    offset.setAttribute("result", "offOut");
+    
+    var blend = document.createElementNS(svgns, "feBlend");
+    blend.setAttribute("in", "SourceGraphic");
+    blend.setAttribute("in2", "blurOut");
+    blend.setAttribute("mode", "normal");
+    
+    f.appendChild(blur);
+    f.appendChild(offset);
+    f.appendChild(blend);
+    parent.appendChild(f);
+}
+
+function create_light_filter(parent, name, brightness)
+{
+    var f = document.createElementNS(svgns, "filter");
+    f.setAttribute("id", name);
+    
+    var flood = document.createElementNS(svgns, "feFlood");
+    flood.setAttribute("result", "floodOut");
+    flood.setAttribute("flood-color", "#000");
+    flood.setAttribute("flood-opacity", 1 - brightness);
+    
+    var blend = document.createElementNS(svgns, "feBlend");
+    blend.setAttribute("mode", "multiply");
+    blend.setAttribute("in", "floodOut");
+    blend.setAttribute("in2", "SourceGraphic");
+    blend.setAttribute("result", "blendOut");
+    
+    var comp = document.createElementNS(svgns, "feComposite");
+    comp.setAttribute("in", "blendOut");
+    comp.setAttribute("in2", "SourceGraphic");
+    comp.setAttribute("result", "compOut");
+    comp.setAttribute("operator", "atop");
+    
+    f.appendChild(flood);
+    f.appendChild(blend);
+    f.appendChild(comp);
+    parent.appendChild(f);
+}
+       
+function write_defs(svg_doc)
+{
+    var defs = document.createElementNS(svgns, "defs");
+
+    create_light_filter(defs, "global_light_t", 0.8);
+    create_light_filter(defs, "global_light_w", 0);
+    create_light_filter(defs, "global_light_s", 0.5);
+    create_light_filter(defs, "global_light_e", 1);
+    
+    create_drop_shadow_filter(defs, "shadow");
+
+    svg_doc.appendChild(defs);
+}
+
+/* 
+ * fill MUST be a 6 digit hex value.
+ */
+function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
 {
     x1 = Math.sin(Math.PI/6) * r;
     y1 = Math.cos(Math.PI/6) * r;
@@ -6,7 +81,7 @@ function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
     x2 = r;
     y2 = 0;
     
-    var g = create_group(mySvg);
+    var g = create_group(parent);
 
     var hex = document.createElementNS(svgns, "polygon");
     
@@ -21,8 +96,10 @@ function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
         (x - x2) + "," + (y + y2) + " " +
         (x - x1) + "," + (y - y1)
     );
+    hex.setAttributeNS(null, "filter", "url(#global_light_t)");
     hex.setAttributeNS(null, "fill", fill);
     hex.setAttributeNS(null, "stroke", "black");
+    hex.setAttributeNS(null, "stroke-linejoin", "bevel");
     g.appendChild(hex);
     
     if (edge1)
@@ -37,11 +114,13 @@ function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
             (x - x1) + "," + (y + y1 + hex_3d_depth) + " " +
             (x - x2) + "," + (y + y2 + hex_3d_depth)
         );
+        bit_1.setAttributeNS(null, "filter", "url(#global_light_w)");
         bit_1.setAttributeNS(null, "fill", fill);
         bit_1.setAttributeNS(null, "stroke", "black");
+        bit_1.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_1);
     }
-    
+   
     if (edge2)
     {
         var bit_2 = document.createElementNS(svgns, "polygon");
@@ -54,8 +133,10 @@ function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
             (x + x1) + "," + (y + y1 + hex_3d_depth) + " " +
             (x - x1) + "," + (y + y1 + hex_3d_depth)
         );
+        bit_2.setAttributeNS(null, "filter", "url(#global_light_s)");
         bit_2.setAttributeNS(null, "fill", fill);
         bit_2.setAttributeNS(null, "stroke", "black");
+        bit_2.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_2);
     }
     
@@ -71,16 +152,22 @@ function create_hexagon(x, y, r, fill, edge1, edge2, edge3)
             (x + x2) + "," + (y + y2 + hex_3d_depth) + " " +
             (x + x1) + "," + (y + y1 + hex_3d_depth)
         );
+        bit_3.setAttributeNS(null, "filter", "url(#global_light_e)");
         bit_3.setAttributeNS(null, "fill", fill);
         bit_3.setAttributeNS(null, "stroke", "black");
+        bit_3.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_3);
     }
 
     return hex;
 }
 
-function create_image(parent, x, y, file, width_mul=1, height_mul=1)
+function create_image(parent, x, y, file, width_mul, height_mul)
 {
+
+    if(typeof(width_mul)==='undefined') width_mul = 1;
+    if(typeof(height_mul)==='undefined') height_mul = 1;
+   
     var img = document.createElementNS(svgns, "image");
     img.setAttribute("pointer-events", "none");
     img.setAttribute("width", "" + (60 * width_mul));
@@ -136,6 +223,15 @@ function create_rect(parent, x, y, width, height, fill)
 function create_group(parent)
 {
     var g = document.createElementNS(svgns, "g");
+    parent.appendChild(g);
+    
+    return g;
+}
+
+function create_shadow_group(parent)
+{
+    var g = document.createElementNS(svgns, "g");
+    g.setAttributeNS(null, "filter", "url(#shadow)");
     parent.appendChild(g);
     
     return g;

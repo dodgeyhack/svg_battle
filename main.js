@@ -219,6 +219,8 @@ function main()
     //mySvg.setAttribute("baseProfile", "tiny");
     container.appendChild(mySvg);
     
+    write_defs(mySvg);
+    
     create_rect(mySvg, 0, 0, 30*24, 30*22, "#2A7FFF")
 
 

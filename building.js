@@ -94,8 +94,9 @@ BuildingStore.prototype.getBuildingList =
         return this.store;
     }
 
-function BuildingIterator(building_store, ignore_army=undefined)
+function BuildingIterator(building_store, ignore_army)
 {
+    if (typeof(ignore_army)==='undefined') ignore_army = undefined;
     this.building_store = building_store.store;
     this.ignore_army = ignore_army;
     this.current = -1;
