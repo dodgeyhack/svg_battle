@@ -181,9 +181,19 @@ function next_turn()
             g.nextTurn();
         }
 
-        set_unit_select_event_handlers();
-
         turn_num++;
+
+        var ai = g.getCurrentArmy().getTracker().ai;
+        if (ai == undefined)
+        {
+            //players turn
+            set_unit_select_event_handlers();
+        }
+        else
+        {
+            // Computer turn
+            ai.Turn();
+        }
     }
 }
 

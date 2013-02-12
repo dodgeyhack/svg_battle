@@ -60,12 +60,12 @@ function write_defs(svg_doc)
 {
     var defs = document.createElementNS(svgns, "defs");
 
-    create_light_filter(defs, "global_light_t", 0.8);
-    create_light_filter(defs, "global_light_w", 0);
-    create_light_filter(defs, "global_light_s", 0.5);
-    create_light_filter(defs, "global_light_e", 1);
+    //create_light_filter(defs, "global_light_t", 0.8);
+    //create_light_filter(defs, "global_light_w", 0);
+    //create_light_filter(defs, "global_light_s", 0.5);
+    //create_light_filter(defs, "global_light_e", 1);
     
-    create_drop_shadow_filter(defs, "shadow");
+    //create_drop_shadow_filter(defs, "shadow");
 
     svg_doc.appendChild(defs);
 }
@@ -96,8 +96,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
         (x - x2) + "," + (y + y2) + " " +
         (x - x1) + "," + (y - y1)
     );
-    hex.setAttributeNS(null, "filter", "url(#global_light_t)");
-    hex.setAttributeNS(null, "fill", fill);
+    //hex.setAttributeNS(null, "filter", "url(#global_light_t)");
+    hex.setAttributeNS(null, "fill", "#1c6c1c");
     hex.setAttributeNS(null, "stroke", "black");
     hex.setAttributeNS(null, "stroke-linejoin", "bevel");
     g.appendChild(hex);
@@ -114,8 +114,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x - x1) + "," + (y + y1 + hex_3d_depth) + " " +
             (x - x2) + "," + (y + y2 + hex_3d_depth)
         );
-        bit_1.setAttributeNS(null, "filter", "url(#global_light_w)");
-        bit_1.setAttributeNS(null, "fill", fill);
+        //bit_1.setAttributeNS(null, "filter", "url(#global_light_w)");
+        bit_1.setAttributeNS(null, "fill", "#000");
         bit_1.setAttributeNS(null, "stroke", "black");
         bit_1.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_1);
@@ -133,8 +133,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x + x1) + "," + (y + y1 + hex_3d_depth) + " " +
             (x - x1) + "," + (y + y1 + hex_3d_depth)
         );
-        bit_2.setAttributeNS(null, "filter", "url(#global_light_s)");
-        bit_2.setAttributeNS(null, "fill", fill);
+        //bit_2.setAttributeNS(null, "filter", "url(#global_light_s)");
+        bit_2.setAttributeNS(null, "fill", "#0d550d");
         bit_2.setAttributeNS(null, "stroke", "black");
         bit_2.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_2);
@@ -152,8 +152,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x + x2) + "," + (y + y2 + hex_3d_depth) + " " +
             (x + x1) + "," + (y + y1 + hex_3d_depth)
         );
-        bit_3.setAttributeNS(null, "filter", "url(#global_light_e)");
-        bit_3.setAttributeNS(null, "fill", fill);
+        //bit_3.setAttributeNS(null, "filter", "url(#global_light_e)");
+        bit_3.setAttributeNS(null, "fill", "#227822");
         bit_3.setAttributeNS(null, "stroke", "black");
         bit_3.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_3);

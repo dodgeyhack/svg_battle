@@ -14,12 +14,21 @@ function ArmyTracker()
 {
     this.objectives = 0;
     this.reset();
+    this.ai = undefined;
+    this.baseWits = 2;
+    this.wits = this.baseWits;
 }
+
+ArmyTracker.prototype.setAi =
+    function(ai)
+    {
+        this.ai = ai;
+    }
 
 ArmyTracker.prototype.reset =
     function()
     {
-        this.wits = 2 + this.objectives;
+        this.wits += this.baseWits + this.objectives;
     }
 
 ArmyTracker.prototype.useWit =
@@ -58,6 +67,8 @@ function Game()
     
     this.armies[0].setTracker(new ArmyTracker());
     this.armies[1].setTracker(new ArmyTracker());
+    
+    this.armies[1].getTracker().setAi(new Ai(this));
     
     this.armies[0].getUnit(0).moveTo(2, 5);
     this.game_map.setOccupied(2, 5, true);
@@ -205,6 +216,24 @@ Game.prototype.isValidMove =
         
         var unit = this.getCurrentUnit();
         return is_path_valid(unit.move, this, unit.x, unit.y, x, y);
+    }
+
+Game.prototype.unitInTile =
+    function(x, y)
+    {
+        var unit_iter = new UnitIterator(this.getCurrentArmy());
+        var unit;
+        
+        while (unit_iter.moveNext())
+        {
+            unit = unit_iter.get();
+            if (unit.x == x && unit.y == y)
+            {
+                return true;
+            }
+        }
+        
+        return this.enemyInTile(x, y);
     }
 
 Game.prototype.enemyInTile =

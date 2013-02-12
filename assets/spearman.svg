@@ -200,13 +200,12 @@
      class="dark_armour" />
   <rect
      style="fill:#aa0000;stroke:#000000;stroke-width:0.70001338;stroke-miterlimit:4;stroke-dasharray:none"
-     id="team_col"
      transform="matrix(0.97808038,-0.2082277,0.19966774,0.97986366,0,0)"
      y="-1.1480685"
      x="-13.927297"
      height="15.519986"
      width="11.460708"
-     class="shield_colour" />
+     class="team_col" />
   <rect
      style="fill:#2b0000;stroke:#000000;stroke-width:0.7;stroke-miterlimit:4;stroke-dasharray:none"
      id="rect3145"

@@ -24,7 +24,7 @@ function GameMap(width, height, map_data, objectives, buildings)
     var y;
     var map_obj;
     
-    var map_group = create_shadow_group(mySvg);
+    var map_group = create_group(mySvg);
     
     /* Build up the data map */
     for (x = 0; x < width; x++)

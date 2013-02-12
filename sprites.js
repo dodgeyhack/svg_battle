@@ -47,6 +47,18 @@ function Sprite(type, colour)
         case "building" : this._constructor_building(); break;
     }
 
+    var elems = this.svg_object.getElementsByTagName("*");
+    console.log(elems.length);
+    for (var i = 0; i < elems.length ;i++)
+    {
+        console.log(elems[i].tagName);
+        console.log(elems[i].getAttribute("class"))
+        if (elems[i].getAttribute("class") == "team_col")
+        {
+            elems[i].setAttribute("fill", this.fill);
+        }
+    }
+
     this.setPosition =
         function(x, y)
         {
