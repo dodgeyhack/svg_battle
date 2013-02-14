@@ -1,3 +1,6 @@
+/*
+ * cmp_fn compares a to b and is like strcmp
+ */
 function PriorityQueue(cmp_fn)
 {
     this.data = new Array();
@@ -11,6 +14,7 @@ PriorityQueue.prototype.insert =
         this.data.sort(this.cmp_fn);
     }   
 
+/* returns undefined if empty */
 PriorityQueue.prototype.pop =
     function()
     {

@@ -16,7 +16,7 @@ function ArmyTracker()
     this.reset();
     this.ai = undefined;
     this.baseWits = 2;
-    this.wits = this.baseWits;
+    this.wits = 0;
 }
 
 ArmyTracker.prototype.setAi =
@@ -102,9 +102,11 @@ function Game()
     this.game_map.setOccupied(11, 3, true);
     this.armies[1].getUnit(3).setTracker(new UnitTracker());
 
-    this.cur_team = 0;
-
     this.finished = false;
+    
+    /* Start the first turn. We know cur_team will be incremented in nextTurn */
+    this.cur_team = -1;
+    this.nextTurn();    
 }
 
 Game.prototype.nextTurn =
