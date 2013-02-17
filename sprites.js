@@ -1,38 +1,17 @@
 function Sprite(type, colour)
 {
-    this._constructor_heavy =
-        function()
+    this._constructor_unit =
+        function(filename)
         {
             this.svg_object = create_group(mySvg);
-            create_image(this.svg_object, 0, 0, "heavy.svg");
-        }
-
-    this._constructor_soldier =
-        function()
-        {
-            this.svg_object = create_group(mySvg);
-            create_image(this.svg_object, 0, 0, "spearman.svg");
-        }
-
-    this._constructor_runner =
-        function()
-        {
-            this.svg_object = create_group(mySvg);
-            create_image(this.svg_object, 0, 0, "runner.svg");
-        }
-
-    this._constructor_archer =
-        function()
-        {
-            this.svg_object = create_group(mySvg);
-            create_image(this.svg_object, 0, 0, "archer.svg");
+            create_image(this.svg_object, 0, 0, filename);
         }
 
     this._constructor_building =
-        function()
+        function(filename)
         {
             this.svg_object = create_group(mySvg);
-            create_image(this.svg_object, 0, 0, "tower.svg", 3, 3);
+            create_image(this.svg_object, 0, 0, filename, 3, 3);
         }
 
     this.fill = colour;
@@ -40,11 +19,9 @@ function Sprite(type, colour)
 
     switch (type)
     {
-        case "heavy": this._constructor_heavy(); break;
-        case "soldier": this._constructor_soldier(); break;
-        case "runner": this._constructor_runner(); break;
-        case "archer": this._constructor_archer(); break;
-        case "building" : this._constructor_building(); break;
+        case "building" : this._constructor_building("tower.svg"); break;
+        default: this._constructor_unit(type+".svg");
+            
     }
 
     var elems = this.svg_object.getElementsByTagName("*");
@@ -76,6 +53,16 @@ function Sprite(type, colour)
             update_text(this.text_object, value);
         }
 }
+
+Sprite.prototype.addStyleSheet =
+    function(filename)
+    {
+        var s = document.createElementNS(svgns, "LINK");
+        s.setAttribute("rel", "stylesheet");
+        s.setAttribute("type", "text/css");
+        s.setAttribute("href", filename);
+        this.svg_object.appendChild(s);
+    }
 
 Sprite.prototype.setOpacity =
     function(alpha)

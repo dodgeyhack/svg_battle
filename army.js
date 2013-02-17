@@ -5,10 +5,14 @@ function Army(colour, game)
     this.colour = colour;
     this.units = Array(4);
 
-    this.units[0] = new Unit(0, new Sprite("heavy", colour), 2, 4, 3, 1, game);
-    this.units[1] = new Unit(1, new Sprite("soldier", colour), 3, 3, 2, 1, game);
-    this.units[2] = new Unit(2, new Sprite("runner", colour), 5, 1, 1, 1, game);
-    this.units[3] = new Unit(3, new Sprite("archer", colour), 1, 1, 3, 3, game);
+    /*
+     *  FIXME: proper army generation
+     *  This is currently just a hack.
+     */
+    this.units[0] = new Unit(0, new Sprite("heavy_"+colour, colour), 2, 4, 3, 1, game);
+    this.units[1] = new Unit(1, new Sprite("spearman_"+colour, colour), 3, 3, 2, 1, game);
+    this.units[2] = new Unit(2, new Sprite("runner_"+colour, colour), 5, 1, 1, 1, game);
+    this.units[3] = new Unit(3, new Sprite("archer_"+colour, colour), 1, 1, 3, 3, game);
     
     this.num_units = this.units.length;
 

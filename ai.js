@@ -114,26 +114,5 @@ Ai.prototype.Turn =
             pq.insert(m);
         }
         
-        /*
-         * Execute moves in order of score.
-         */
-        console.log('AI has '+this.game.getCurrentArmy().getTracker().wits+' wits.');
-        
-        var move = pq.pop();
-        while (move != undefined)
-        {
-            /* Moves and attacks won't happen if there aren't enough wits */
-            this.game.selectUnit(move.unit.id);
-            if (move.doMove)
-            {
-                this.game.MoveCurrentUnit(move.x, move.y);
-            }
-            
-            if (move.target != undefined)
-            {
-                this.game.attackWithCurrentUnit(move.target.id);
-            }
-            
-            move = pq.pop();
-        }
+        return pq;
     }

@@ -16,6 +16,8 @@ function Unit(id, sprite, move, health, damage, range, game)
     this.alive = true;
 
     this.sprite.setText(this.health);
+    
+    this.sprite.addStyleSheet("teams.css");
 
     if (damage > 0)
     {

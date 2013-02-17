@@ -374,7 +374,7 @@ Game.prototype.updateFogOfWar =
             unit = unit_iter.get();
             if (this.game_map.getTile(unit.x, unit.y).obscured)
             {
-                unit.sprite.setOpacity(0.5);
+                unit.sprite.setOpacity(0.3);
             }
             else
             {
