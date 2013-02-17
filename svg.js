@@ -1,3 +1,38 @@
+/*
+ * Return col, either darkened or lightened
+ * by delta. delta may be positive or negative.
+ * col must be in # format.
+ */
+function mod_svg_colour(col, delta)
+{
+    var r;
+    var g;
+    var b;
+    
+    r = parseInt(col.slice(1, 3), 16) + delta;
+    g = parseInt(col.slice(3, 5), 16) + delta;
+    b = parseInt(col.slice(5, 7), 16) + delta;
+    
+    
+    if (r > 255) r = 255;
+    if (g > 255) g = 255;
+    if (b > 255) b = 255;
+    
+    if (r < 0) r = 0;
+    if (g < 0) g = 0;
+    if (b < 0) b = 0;
+    
+    var r_hex = r.toString(16);
+    var g_hex = g.toString(16);
+    var b_hex = b.toString(16);
+
+    if (r_hex.length < 2) r_hex = "0" + r_hex;
+    if (g_hex.length < 2) g_hex = "0" + g_hex;
+    if (b_hex.length < 2) b_hex = "0" + b_hex;
+    
+    return ("#" + r_hex + g_hex + b_hex);
+}
+
 function create_drop_shadow_filter(parent, name)
 {
     var f = document.createElementNS(svgns, "filter");
@@ -97,7 +132,7 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
         (x - x1) + "," + (y - y1)
     );
     //hex.setAttributeNS(null, "filter", "url(#global_light_t)");
-    hex.setAttributeNS(null, "fill", "#1c6c1c");
+    hex.setAttributeNS(null, "fill", fill);
     hex.setAttributeNS(null, "stroke", "black");
     hex.setAttributeNS(null, "stroke-linejoin", "bevel");
     g.appendChild(hex);
@@ -115,7 +150,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x - x2) + "," + (y + y2 + hex_3d_depth)
         );
         //bit_1.setAttributeNS(null, "filter", "url(#global_light_w)");
-        bit_1.setAttributeNS(null, "fill", "#000");
+        bit_1.setAttributeNS(null, "fill", mod_svg_colour(fill, -128));
+        //bit_1.setAttributeNS(null, "fill", "#000");
         bit_1.setAttributeNS(null, "stroke", "black");
         bit_1.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_1);
@@ -134,7 +170,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x - x1) + "," + (y + y1 + hex_3d_depth)
         );
         //bit_2.setAttributeNS(null, "filter", "url(#global_light_s)");
-        bit_2.setAttributeNS(null, "fill", "#0d550d");
+        //bit_2.setAttributeNS(null, "fill", "#0d550d");
+        bit_2.setAttributeNS(null, "fill", mod_svg_colour(fill, -32));
         bit_2.setAttributeNS(null, "stroke", "black");
         bit_2.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_2);
@@ -153,7 +190,8 @@ function create_hexagon(parent, x, y, r, fill, edge1, edge2, edge3)
             (x + x1) + "," + (y + y1 + hex_3d_depth)
         );
         //bit_3.setAttributeNS(null, "filter", "url(#global_light_e)");
-        bit_3.setAttributeNS(null, "fill", "#227822");
+        //bit_3.setAttributeNS(null, "fill", "#227822");
+        bit_3.setAttributeNS(null, "fill", mod_svg_colour(fill, 16));
         bit_3.setAttributeNS(null, "stroke", "black");
         bit_3.setAttributeNS(null, "stroke-linejoin", "bevel");
         g.appendChild(bit_3);

@@ -19,7 +19,6 @@ Building.prototype.setSprite =
     function(sprite)
     {
         this.sprite = sprite;
-        console.log("Setting building position");
         this.sprite.setPosition(gamemap_get_map_screenx(this.x), gamemap_get_map_screeny(this.x, this.y));
         this.sprite.setText(this.health);
     }

@@ -43,6 +43,7 @@ function GameMap(width, height, map_data, objectives, buildings)
             }
             
             map_obj.occupied = false;
+            map_obj.obscured = true;
 
             this.map[x][y] = map_obj;
         }
@@ -114,7 +115,7 @@ function GameMap(width, height, map_data, objectives, buildings)
                     )
                 );
 
-                map_obj.tile_type = TILE_GRASS;
+                //map_obj.tile_type = TILE_GRASS;
             }
         }
     }
@@ -178,7 +179,22 @@ GameMap.prototype.redraw =
                 var tile = this.map[x][y];
                 if (tile.sprite != undefined)
                 {
-                    tile.sprite.setAttribute("fill", gamemap_get_fill(tile.tile_type));
+                    if (tile.obscured)
+                    {
+                        tile.sprite.setAttribute
+                        (
+                            "fill",
+                            mod_svg_colour
+                            (
+                                gamemap_get_fill(tile.tile_type),
+                                -64
+                            )
+                        );
+                    }
+                    else
+                    {
+                        tile.sprite.setAttribute("fill", gamemap_get_fill(tile.tile_type));
+                    }
                 }
             }
         }
@@ -230,20 +246,41 @@ GameMap.prototype.isOccupied =
         return this.getTile(x, y).occupied;
     }
 
+GameMap.prototype.obscureAll =
+    function()
+    {
+        var x;
+        var y;
+        
+        for (x = 0; x < this.width; x++)
+        {
+            for (y = 0; y < this.height; y++)
+            {
+                this.map[x][y].obscured = true;
+            }
+        }   
+    }
+    
+GameMap.prototype.setVisible =
+    function(x, y)
+    {
+        var tile = this.getTile(x, y);
+        tile.obscured = false;
+    }
 
 function gamemap_get_fill(value)
 {
     switch(value)
     {
-        case 0: return "#217821"; // grass - passable
-        case 1: return "blue";  // water - impassable
-        case 2: return "#165016";  // blocked - impassable
-        case 3: return "800000"; // team 0 base
-        case 4: return "#000080"; // team 1 base
-        case 5: return "#800000"; // team 0 spawn
-        case 6: return "#000080"; // team 1 spawn
-        case 7: return "#2CA02C"; // neutral objective
-        default: return "yellow";
+        case TILE_GRASS: return "#1c6c1c"; // grass - passable
+        case TILE_WATER: return "#CC00CC";  // water - impassable
+        case TILE_OBSTACLE: return "#165016";  // blocked - impassable
+        case TILE_BASE0: return "#800000"; // team 0 base
+        case TILE_BASE1: return "#000080"; // team 1 base
+        case TILE_SPAWN0: return "#800000"; // team 0 spawn
+        case TILE_SPAWN1: return "#000080"; // team 1 spawn
+        case TILE_OBJECTIVE: return "#2CA02C"; // neutral objective
+        default: return "#FFFF00";
     }
 }
 

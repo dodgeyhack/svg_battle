@@ -60,6 +60,10 @@ HexMap.prototype.getTile =
         }
         catch(e)
         {
+            /* 
+             * FIXME: Need to return an error in this case,
+             * and handle this everywhere.
+             */
             console.log(x);
             console.log(y);
             console.log(nx);

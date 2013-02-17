@@ -48,11 +48,9 @@ function Sprite(type, colour)
     }
 
     var elems = this.svg_object.getElementsByTagName("*");
-    console.log(elems.length);
+
     for (var i = 0; i < elems.length ;i++)
     {
-        console.log(elems[i].tagName);
-        console.log(elems[i].getAttribute("class"))
         if (elems[i].getAttribute("class") == "team_col")
         {
             elems[i].setAttribute("fill", this.fill);
@@ -78,6 +76,12 @@ function Sprite(type, colour)
             update_text(this.text_object, value);
         }
 }
+
+Sprite.prototype.setOpacity =
+    function(alpha)
+    {
+        this.svg_object.setAttribute("opacity", ""+alpha);
+    }
 
 Sprite.prototype.destroy =
     function()

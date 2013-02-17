@@ -41,6 +41,11 @@ EventHandlerTracker.prototype.removeAllFrom =
     {
         var object;
         
+        if (this.groups[group] == undefined)
+        {
+            return;
+        }
+        
         while (undefined != (object = this.groups[group].pop()))
         {
             object.removeAttribute("onclick");

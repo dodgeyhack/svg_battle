@@ -52,6 +52,7 @@ function Game()
     var building_iter = new BuildingIterator(this.buildings);
     var building;
 
+    /* Buildings must be placed last so they don't overlap with the hexes */
     while (building_iter.moveNext())
     {
         building = building_iter.get();
@@ -217,7 +218,16 @@ Game.prototype.isValidMove =
         }
         
         var unit = this.getCurrentUnit();
-        return is_path_valid(unit.move, this, unit.x, unit.y, x, y);
+        return is_path_valid
+               (
+                   unit.move,
+                   this,
+                   unit.x,
+                   unit.y,
+                   x,
+                   y,
+                   get_path_find_walk_test_fn(this)
+               );
     }
 
 Game.prototype.unitInTile =
@@ -298,8 +308,110 @@ Game.prototype.attackBuildingWithCurrentUnit =
         if (building.isDead())
         {
             console.log("Building is dead, how sad =[ ");
-            /* Should do something here */
+            /* FIXME: Should do something here */
         }
 
         this.getCurrentArmy().getTracker().useWit();
     }
+
+Game.prototype.updateFogOfWar =
+    function()
+    {
+        this.game_map.obscureAll();
+        
+        var unit_iter = new UnitIterator(this.getCurrentArmy());
+        var unit;
+        var visible_list;
+        var posi;
+        var max_dist;
+
+        while (unit_iter.moveNext())
+        {
+            unit = unit_iter.get();
+            /* Clear any opacity that may have been set before */
+            unit.sprite.setOpacity(1);
+            
+            max_dist = Math.max(unit.move, unit.range);
+            
+            this.game_map.setVisible(unit.x, unit.y);
+            
+            visible_list = 
+                this.game_map.getSurroundingHex
+                (
+                    unit.x,
+                    unit.y,
+                    max_dist
+                );
+
+            for (posi = 0; posi < visible_list.length; posi++)
+            {
+                if
+                (
+                    is_path_valid
+                    (
+                        max_dist,
+                        this,
+                        unit.x,
+                        unit.y,
+                        visible_list[posi].x,
+                        visible_list[posi].y,
+                        get_path_find_visible_test_fn(this)
+                    )
+                )
+                {
+                    this.game_map.setVisible
+                    (
+                        visible_list[posi].x,
+                        visible_list[posi].y
+                    );
+                }    
+            }
+        }
+
+        unit_iter = this.getEnemyUnitIterator();
+        while (unit_iter.moveNext())
+        {
+            unit = unit_iter.get();
+            if (this.game_map.getTile(unit.x, unit.y).obscured)
+            {
+                unit.sprite.setOpacity(0.5);
+            }
+            else
+            {
+                unit.sprite.setOpacity(1);
+            }
+        }
+    }
+    
+/* Hah! Finally managed to use closures */
+function get_path_find_walk_test_fn(game)
+{
+    return function(x, y, dest_x, dest_y)
+    {
+        return (
+            game.getGameMap().isPassable(x, y)
+            &&
+            !game.enemyInTile(x, y)
+        );
+    }
+}
+
+function get_path_find_visible_test_fn(game)
+{
+    return function(x, y, dest_x, dest_y)
+    {
+        var game_map = game.getGameMap();
+       
+        return (
+                game_map.isPassable(x, y)
+                ||
+                game_map.getTile(x,y).tile_type == TILE_WATER
+            )
+            &&
+            (
+                (x == dest_x && y == dest_y)
+                ||
+                !game.enemyInTile(x, y)
+            );
+    }
+}

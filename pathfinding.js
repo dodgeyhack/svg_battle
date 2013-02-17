@@ -51,7 +51,21 @@ function PathFindTile(x, y, f, g, parent)
     this.closed = false;
 }
 
-function is_path_valid(max_dist, game, start_x, start_y, dest_x, dest_y)
+/*
+ * test_fn is a function with the prototype test_fn(x,y,dest_x,dest_y) and
+ * that must return true or false depending on whether the tile (x,y) is
+ * passable on the way to (dest_x,dest_y).
+ */
+function is_path_valid
+(
+    max_dist,
+    game,
+    start_x,
+    start_y,
+    dest_x,
+    dest_y,
+    test_fn
+)
 {
     var game_map = game.getGameMap();
     /* 
@@ -137,38 +151,39 @@ function is_path_valid(max_dist, game, start_x, start_y, dest_x, dest_y)
                 tile = new PathFindTile(adj_list[i].x, adj_list[i].y, f, g, null);
                 map.addTile(adj_list[i].x, adj_list[i].y, tile);
             }
-
-            if (tile.closed || !game_map.isPassable(adj_list[i].x, adj_list[i].y) || game.enemyInTile(adj_list[i].x, adj_list[i].y))
+            
+            if
+            (
+                !tile.closed
+                &&
+                test_fn(adj_list[i].x, adj_list[i].y, dest_x, dest_y)
+            )
             {
-                // ignore
-                continue;
-            }
-
-            if (tile.open)
-            {
-                // compare newly calculated G cost against stored G cost
-                // if new G is lower, replace
-                if (g < tile.g)
+                if (tile.open)
                 {
+                    // compare newly calculated G cost against stored G cost
+                    // if new G is lower, replace
+                    if (g < tile.g)
+                    {
+                        tile.f = f;
+                        tile.g = g;
+                        tile.parent = current_tile;
+                        // need to re-sort open list, as f has changed
+                        open.resort();
+                    }
+                }
+                else
+                {
+                    // I'm pretty sure in this case, we will always have created a new node
+                    // (if both open and closed are false, this tile has never been in the map)
+                    // so probably don't need to set f and g. But for now we'll set it just in case.
                     tile.f = f;
                     tile.g = g;
+                    tile.open = true;
+                    open.insert(tile);
                     tile.parent = current_tile;
-                    // need to re-sort open list, as f has changed
-                    open.resort();
-                }
-            }
-            else
-            {
-                // I'm pretty sure in this case, we will always have created a new node
-                // (if both open and closed are false, this tile has never been in the map)
-                // so probably don't need to set f and g. But for now we'll set it just in case.
-                tile.f = f;
-                tile.g = g;
-                tile.open = true;
-                open.insert(tile);
-                tile.parent = current_tile;
+                }                
             }
         }
     }
 }
-

@@ -14,10 +14,12 @@ function unit_move_click(evt) {
     var mx = parseInt(hex.getAttribute("game_pos_x"));
     var my = parseInt(hex.getAttribute("game_pos_y"));
     
-    g.getGameMap().redraw();
     event_handlers.removeAllFrom("unit");
 
     g.MoveCurrentUnit(mx, my);
+    
+    g.updateFogOfWar();
+    g.getGameMap().redraw();
     
     set_unit_select_event_handlers();
 }
@@ -42,6 +44,9 @@ function unit_attack_click(evt)
     var target_id = parseInt(hex.getAttribute("game_attack_unit_id"));
     
     g.attackWithCurrentUnit(target_id);    
+    
+    /* really only need to update fow if unit dies */
+    g.updateFogOfWar();
     
     g.getGameMap().redraw();
     event_handlers.removeAllFrom("unit");
@@ -180,6 +185,8 @@ function next_turn()
         {
             g.nextTurn();
         }
+        g.updateFogOfWar();
+        g.getGameMap().redraw();
 
         turn_num++;
 
@@ -193,15 +200,16 @@ function next_turn()
         {
             // Computer turn
             ai.Turn();
+            /* Update the view after the ai has moved */
+            g.updateFogOfWar();
+            g.getGameMap().redraw();
         }
     }
 }
 
 function next_turn_click()
 {
-    g.getGameMap().redraw();
     event_handlers.removeAllFrom("unit");
-
     next_turn();
 }
 
@@ -238,7 +246,7 @@ function main()
     
     create_dashboard();
     
-    next_turn();
+    next_turn_click();
 }
 
 window.onload = main;
