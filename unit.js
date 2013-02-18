@@ -1,4 +1,4 @@
-function Unit(id, sprite, move, health, damage, range, game)
+function Unit(id, name, sprite, move, health, damage, range, game)
 {
     Unit.baseConstructor.call(this, 0, 0, sprite);
 /*
@@ -8,6 +8,7 @@ function Unit(id, sprite, move, health, damage, range, game)
     this.game = game;
 
     this.id = id;
+    this.name = name;
     this.move = move;
     this.max_health = health;
     this.health = health;

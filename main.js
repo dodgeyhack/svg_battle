@@ -199,33 +199,8 @@ function next_turn()
         else
         {
             // Computer turn
-            var ai_moves = ai.Turn();
-            
-            /*
-             * Execute moves in order of score.
-             */
             console.log('AI has '+g.getCurrentArmy().getTracker().wits+' wits.');
-
-            var move = ai_moves.pop();
-            while (move != undefined)
-            {
-                /* Moves and attacks won't happen if there aren't enough wits */
-                g.selectUnit(move.unit.id);
-                if (move.doMove)
-                {
-                    g.MoveCurrentUnit(move.x, move.y);
-                }
-
-                if (move.target != undefined)
-                {
-                    g.attackWithCurrentUnit(move.target.id);
-                }
-                /* Update the view after the ai has moved */
-                g.updateFogOfWar();
-                g.getGameMap().redraw();
-
-                move = ai_moves.pop();
-            }
+            ai.Turn();
         }
     }
 }

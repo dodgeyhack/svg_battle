@@ -1,106 +1,64 @@
-function InfluenceMap(gamemap, unit, friends, enemies)
+function InfluenceMap(width, height)
 {
-    InfluenceMap.baseConstructor.call(this, gamemap.width, gamemap.height);
+    InfluenceMap.baseConstructor.call(this, width, height, visible=true);
     
-    this.gamemap = gamemap;
-
+    this.max_list = undefined;
+    this.max_value = undefined;
+    
     for (var i = 0; i < this.width; i++)
     {
         for (var j = 0; j < this.height; j++)
         {
-            var o = new Object();
-            o.value = 0;
-            this.map[i][j] = o;
+            this.map[i][j] = {"value":0};
         }
     }
-    
-    poslist = hexmap_get_surrounding_r(unit.x, unit.y, unit.move);
-    
-    for (var posi = 0; posi < poslist.length; posi++)
-    {
-        var mx = poslist[posi].x;
-        var my = poslist[posi].y;
-        
-        var tile = this.getTile(mx, my);
-        
-        if (this.gamemap.isPassable(mx, my))
-        {
-            tile.value = 0;
-        }
-        
-        for (var ei = 0; ei < enemies.length; ei++)
-        {
-            if (hexmap_distance(mx, my, enemies[ei].x, enemies[ei].y) < 2)
-            {
-                tile.value -= enemies[ei].damage * 20;;
-            }
-        }
-    }
-
-    /*
-    // step through each enemy
-
-    for (var i = 0; i < enemies.length; i++)
-    {
-    
-        this.map[hexmap_get_bufx(enemies[i].x)][hexmap_get_bufy(enemies[i].y)] = -255;
-        
-        
-        var l = hexmap_get_surrounding_r(enemies[i].x, enemies[i].y, 1);
-
-        // in squares where I could take damage, subtract that damage
-        for (var j = 0; j < l.length; j++)
-        {
-            tile = this.getTile(l[j].x, l[j].y);
-            
-            if (this.gamemap.getTile(l[j].x, l[j].y).tile_type != 0)
-            {
-                continue;
-            }
-            
-            tile.value -= enemies[i].damage * 20;
-            
-            // in squares where damage would kill me, subtract more
-            if (enemies[i].damage >= unit.health)
-            {
-                tile.value -= 50 ; 
-            }
-            
-            // in squares where I could damage enemy, add that damage
-            tile.value += unit.damage * 40;
-            
-            // in squares where I could kill the enemy, add more
-            if (unit.damage >= enemies[i].health)
-            {
-                tile.value += 50;
-            }
-        }
-    }
-    */
-    
-    
-    /* Add objectives held by enemy */
-    
-    /* Add squares that are just out of reach of the enemy, closer to their base or objective is higher */
 }
 
 KevLinDev.extend(InfluenceMap, HexMap);
-    
-InfluenceMap.prototype.drawOnMap = 
+
+InfluenceMap.prototype.clearAll =
     function()
     {
-        for (var x = 0; x < this.width; x++)
+        this.max_value = undefined;
+        this.max_list = undefined;
+        
+        for (var i = 0; i < this.width; i++)
         {
-            for (var y = 0; y < this.height; y++)
+            for (var j = 0; j < this.height; j++)
             {
-                if (this.map[x][y].value < 0)
-                {
-                    this.gamemap.map[x][y].sprite.setAttribute("fill", "rgb("+(-this.map[x][y].value)+",0,0)");
-                }
-                else if (this.map[x][y].value > 0)
-                {
-                    this.gamemap.map[x][y].sprite.setAttribute("fill", "rgb(0,0,"+this.map[x][y].value+")");
-                }
+                this.map[i][j].value = 0;
             }
-        }   
+        }
+    }
+
+InfluenceMap.prototype.addInfluence =
+    function(x, y, influence)
+    {
+        var tile = this.getTile(x, y);
+        tile.value += influence;
+        
+        if (this.max_list == undefined || tile.value > this.max_value)
+        {
+            this.max_value = tile.value;
+            this.max_list = [];
+            this.max_list.push({"x":x, "y":y, "score":tile.value});
+        }
+        else if (tile.value == this.max_value)
+        {
+            this.max_list.push({"x":x, "y":y, "score":tile.value});
+        }
+    }
+
+InfluenceMap.prototype.getHighest = 
+    function()
+    {
+        if (this.max_list == undefined)
+        {
+            return undefined;
+        }
+        else
+        {
+            //FIXME: return a random selection
+            return this.max_list[0];
+        }
     }

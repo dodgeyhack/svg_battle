@@ -3,7 +3,7 @@
  */
 function PriorityQueue(cmp_fn)
 {
-    this.data = new Array();
+    this.data = [];
     this.cmp_fn = cmp_fn;
 }   
 
@@ -27,3 +27,8 @@ PriorityQueue.prototype.resort =
         this.data.sort(this.cmp_fn);
     }
 
+PriorityQueue.prototype.clear =
+    function()
+    {
+        this.data = [];
+    }
