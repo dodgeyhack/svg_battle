@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/css" href="red.css" ?>    
+
+<svg
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   viewBox="-30 -30 60 60"
+   version="1.1"
+   width="100%"
+   height="100%"
+   style="stroke:#000000; stroke-width:0.7; stroke-miterlimit:4; fill: #00a"
+  >
+  <path
+     style="fill:#6d6d6d"
+     d="m -3.1265462,-10.051957 -0.446879,5.1319936 11.6451661,0.080608 -0.4994556,-5.2126016 z"
+     class="dark_armour" />
+  <rect
+     style="fill:#6d6d6d"
+     transform="matrix(0.17863684,-0.98391508,0.98248099,0.18636281,0,0)"
+     y="5.4769187"
+     x="-4.6847596"
+     height="8.9585304"
+     width="5.5286493"
+     class="dark_armour" />
+  <rect
+     style="fill:#d38d5f"
+     y="-3.5741272"
+     x="-0.24820222"
+     height="4.2558441"
+     width="4.5800219"
+     class="skin" />
+  <rect
+     style="fill:#d38d5f"
+     y="-12.724192"
+     x="-2.3300304"
+     height="10.426818"
+     width="8.7436781"
+     class="skin" />
+  <rect
+     style="fill:#ffffff"
+     y="-9.5323086"
+     x="3.2909057"
+     height="2.1279221"
+     width="2.4981937"
+     class="eye_white" />
+  <rect
+     style="fill:#ffffff"
+     transform="scale(-1,1)"
+     y="-9.5323086"
+     x="-1.0008947"
+     height="2.1279221"
+     width="2.4981937"
+     class="eye_white" />
+  <path
+     style="fill:#939393"
+     d="m 1.094985,-18.475857 c 0,0 -3.2333082,-0.403035 -3.7064744,3.707934 -0.4731663,4.110966 -0.1314342,3.224287 -0.1314342,3.224287 l 3.9693448,-0.02687 z"
+     class="light_armour" />
+  <path
+     style="fill:#939393"
+     d="m 2.9457636,-18.435105 c 0,0 3.7853382,-0.483643 4.2585045,3.627326 0.4731662,4.110966 0.1051469,3.143679 0.1051469,3.143679 l -4.2585045,0.05374 z"
+     class="light_armour" />
+  <path
+     style="fill:#6d6d6d"
+     d="M 1.00052,-9.9713489 0.65878787,-5.8872486 3.7080854,-5.8335101 3.2349191,-9.9982182 z"
+     class="dark_armour" />
+  <rect
+     y="-8.6811399"
+     x="4.1236372"
+     height="0.42558441"
+     width="0.41636565"
+     style="fill:#0000ff" />
+  <path
+     style="fill:#6d6d6d"
+     d="m -3.3105548,-9.9444796 11.1457105,0 -0.026287,-1.7733594 -4.6002366,0.05374 -0.1051469,-7.200912 -2.102965,0 0.1051489,7.200912 -4.4162237,0 z"
+     class="dark_armour" />
+  <rect
+     style="fill:#0000ff"
+     transform="scale(-1,1)"
+     y="-8.6811399"
+     x="0.0400194"
+     height="0.42558441"
+     width="0.41636565"
+     class="eye_ball" />
+  <path
+     style="fill:#000000"
+     d="M -0.14537032,-3.7196686 4.3019497,-4.1856792"
+     class="mouth" />
+  <rect
+     style="fill:#6d6d6d"
+     y="-0.3822442"
+     x="-4.4118586"
+     height="10.426818"
+     width="12.907335"
+     class="dark_armour" />
+  <rect
+     style="fill:#004455"
+     y="12.172496"
+     x="2.2499917"
+     height="9.1500645"
+     width="5.4127531"
+     class="pants" />
+  <rect
+     style="fill:#004455"
+     y="12.172496"
+     x="-3.9954929"
+     height="9.1500645"
+     width="5.4127531"
+     class="pants" />
+  <rect
+     style="fill:#939393"
+     y="10.044574"
+     x="-4.6200414"
+     height="4.8942208"
+     width="12.907335"
+     class="light_armour" />
+  <rect
+     style="fill:#552200"
+     y="-18.469582"
+     x="14.532778"
+     height="40.430519"
+     width="0.83273131"
+     class="wood" />
+  <path
+     style="fill:#939393"
+     d="m 15.006392,-13.813626 -1.282936,-5.903987 1.135472,-6.670738 1.282937,5.903987 z"
+     class="light_armour" />
+  <rect
+     style="fill:#6d6d6d"
+     transform="matrix(0.97808038,-0.2082277,0.19966774,0.97986366,0,0)"
+     y="-1.9984787"
+     x="-14.969179"
+     height="17.646011"
+     width="13.544473"
+     class="dark_armour" />
+  <rect
+     transform="matrix(0.97808038,-0.2082277,0.19966774,0.97986366,0,0)"
+     y="-1.1480685"
+     x="-13.927297"
+     height="15.519986"
+     width="11.460708"
+     class="team_col" />
+  <rect
+     style="fill:#2b0000"
+     y="19.620222"
+     x="-3.3709445"
+     height="1.7023376"
+     width="4.371839"
+     class="shoe" />
+  <rect
+     style="fill:#2b0000"
+     y="19.620222"
+     x="2.8745401"
+     height="1.7023376"
+     width="4.371839"
+     class="shoe" />
+</svg>
