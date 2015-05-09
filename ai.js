@@ -39,6 +39,8 @@ function Ai(game)
     
     var game_map = game.getGameMap();
     this.inf_map = new InfluenceMap(game_map.width, game_map.height, visible=true);
+
+    this.aidebug = new AiDebug(game, game_map);
 }
 
 Ai.prototype.findBestMove =
@@ -84,8 +86,13 @@ Ai.prototype.findBestMove =
              * affected by something below.
              * Initialise current tile to 1 so we have a tendency to stay in
              * place if there's no better options.
+             * If playing the game without wits, there's no benefit to staying
+             * in place so cancel that above in this version.
              */
-            this.inf_map.setInfluence(x, y, (x == unit.x && y == unit.y)?1:0);
+            //this.inf_map.setInfluence(x, y, (x == unit.x && y == unit.y)?1:0);
+            //this.inf_map.setInfluence(x, y, 0);
+            // add a small amount of randonmisation to stop us getting stuck in a steady state.
+            this.inf_map.setInfluence(x, y, Math.random() * 3);
             
             /* Is this in our half - +inf if we are in defense mode +10 */
             
@@ -108,6 +115,17 @@ Ai.prototype.findBestMove =
                     );            
                 }
             }
+
+            /* Don't block spawn points */
+            if (game_map.getTile(x, y).tile_type == TILE_SPAWN0 || game_map.getTile(x, y).tile_type == TILE_SPAWN1)
+            {
+                this.inf_map.addInfluence(x, y, -10);
+            }
+
+            /* Approach enemy spawn */
+            // for now, just make them move right a bit
+            this.inf_map.addInfluence(x, y, x - unit.x);
+
             /* Is this a good defense position - difficult access for enemy +15 */
             
             /* Does this position defend a friend +10 */
@@ -230,6 +248,7 @@ Ai.prototype.findBestMove =
         var m = new AiMove(unit);
         
         var attack_pos = {"x":unit.x, "y":unit.y};
+
         
         var inf_map_best = this.inf_map.getHighest();
         if (inf_map_best != undefined)
@@ -302,6 +321,41 @@ Ai.prototype.findBestMove =
         return m;
     }
 
+Ai.prototype.singleUnitTurn =
+    function(unit)
+    {
+        var g = this.game;
+        var move = this.findBestMove(unit);
+        if (move !== undefined) {
+            // @todo disable wit counting
+            g.selectUnit(move.unit.id);
+            if (move.doMove)
+            {
+                console.log("moving "+move.unit.name+" to "+move.x+","+move.y);
+                g.MoveCurrentUnit(move.x, move.y);
+            }
+            else
+            {
+                console.log(move.unit.name+" decided not to move.");
+            }
+
+            if (move.target != undefined)
+            {
+                console.log(unit.name+" is attacking "+move.target.name);
+                g.attackWithCurrentUnit(move.target.id);
+            }
+        }
+        /* Update the view after the ai has moved */
+        g.updateFogOfWar();
+        g.getGameMap().redraw();
+        this.aidebug.showInfMap(this.inf_map);
+    }
+
+/*
+ * Runs through a whole turn for the AI.
+ * This gives the best chance to work together and make the most
+ * of the wits by spending them on the best moves.
+ */
 Ai.prototype.Turn =
     function()
     {
