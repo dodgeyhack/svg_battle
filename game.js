@@ -10,13 +10,44 @@ UnitTracker.prototype.reset =
         this.attacked = false;
     }
 
-function ArmyTracker()
+function ArmyTrackerUseWits()
 {
     this.objectives = 0;
     this.reset();
     this.ai = undefined;
     this.baseWits = 2;
     this.wits = 0;
+}
+
+ArmyTrackerUseWits.prototype.setAi =
+    function(ai)
+    {
+        this.ai = ai;
+    }
+
+ArmyTrackerUseWits.prototype.reset =
+    function()
+    {
+        this.wits += this.baseWits + this.objectives;
+    }
+
+ArmyTrackerUseWits.prototype.useWit =
+    function()
+    {
+        this.wits--;
+    }
+
+ArmyTrackerUseWits.prototype.hasWits =
+    function()
+    {
+        return (this.wits > 0 ? true : false);
+    }
+
+function ArmyTracker()
+{
+    this.objectives = 0;
+    this.reset();
+    this.ai = undefined;
 }
 
 ArmyTracker.prototype.setAi =
@@ -28,19 +59,17 @@ ArmyTracker.prototype.setAi =
 ArmyTracker.prototype.reset =
     function()
     {
-        this.wits += this.baseWits + this.objectives;
     }
 
 ArmyTracker.prototype.useWit =
     function()
     {
-        this.wits--;
     }
 
 ArmyTracker.prototype.hasWits =
     function()
     {
-        return (this.wits > 0 ? true : false);
+        return true;
     }
 
 function Game()
@@ -69,6 +98,7 @@ function Game()
     this.armies[0].setTracker(new ArmyTracker());
     this.armies[1].setTracker(new ArmyTracker());
     
+    this.armies[0].getTracker().setAi(new Ai(this));
     this.armies[1].getTracker().setAi(new Ai(this));
     
     this.armies[0].getUnit(0).moveTo(2, 5);
@@ -133,13 +163,14 @@ Game.prototype.getGameMap =
     {
         return this.game_map;
     }
-    
+
 Game.prototype.getCurrentArmy =
     function()
     {
         return this.armies[this.cur_team];
     }
 
+// @todo Support more than one other army.
 Game.prototype.getEnemyArmy =
     function()
     {
@@ -156,6 +187,13 @@ Game.prototype.getEnemyUnitIterator =
     function()
     {
         return new UnitIterator(this.armies[(this.cur_team + 1) % this.num_teams]);
+    }
+
+Game.prototype.selectArmy =
+    function(army_id)
+    {
+        this.cur_team = army_id;
+        assert( this.cur_team >= 0 && this.cur_team < this.num_teams);
     }
     
 Game.prototype.selectUnit =

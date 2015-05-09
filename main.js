@@ -3,6 +3,7 @@ var xlinkns = "http://www.w3.org/1999/xlink";
 var mySvg;
 
 var g;
+var gf;
 
 var turn_num = 0;
 
@@ -207,8 +208,9 @@ function next_turn()
 
 function next_turn_click()
 {
-    event_handlers.removeAllFrom("unit");
-    next_turn();
+    //event_handlers.removeAllFrom("unit");
+    //next_turn();
+    gf.turn();
 }
 
 function create_dashboard()
@@ -241,6 +243,7 @@ function main()
 
 
     g = new Game();
+    gf = new GameFlow(g);
     
     create_dashboard();
     

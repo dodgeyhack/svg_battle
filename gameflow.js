@@ -6,13 +6,14 @@ function GameFlow(game)
         this.unit_iterators[i] = new UnitIterator(game.armies[i]);
     }
     this.current_army = 0;
-    this.turn_num = 0;
+    this.turn_num = 1;
 }
 
 GameFlow.prototype.turn =
     function()
     {
         var army = this.current_army;
+        /*
         if (false === this.unit_iterators[army].moveNext()) {
             this.game.nextTurn();
             this.current_army += 1;
@@ -26,4 +27,21 @@ GameFlow.prototype.turn =
         var unit = this.unit_iterators[army].get();
         var ai = this.game.armies[this.current_army].getTracker().ai;
         ai.singleUnitTurn(unit);
+        */
+ 
+        this.game.selectArmy(army);
+       
+        if (false === this.unit_iterators[army].moveNext()) {
+            this.unit_iterators[army].moveFirst();
+            this.unit_iterators[army].moveNext();
+        }
+
+        var unit = this.unit_iterators[army].get();
+        assert(unit !== undefined);
+        this.game.armies[army].getTracker().ai.singleUnitTurn(unit);
+
+        this.current_army += 1;
+        this.current_army %= this.game.num_teams;
+        if (this.current_army === 0)
+            this.turn_num += 1;
     }
