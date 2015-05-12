@@ -17,7 +17,7 @@ function unit_move_click(evt) {
     
     event_handlers.removeAllFrom("unit");
 
-    g.MoveCurrentUnit(mx, my);
+    g.moveCurrentUnit(mx, my);
     
     g.updateFogOfWar();
     g.getGameMap().redraw();

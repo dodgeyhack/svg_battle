@@ -326,25 +326,10 @@ Ai.prototype.singleUnitTurn =
     {
         var g = this.game;
         var move = this.findBestMove(unit);
-        if (move !== undefined) {
-            // @todo disable wit counting
-            g.selectUnit(move.unit.id);
-            if (move.doMove)
-            {
-                console.log("moving "+move.unit.name+" to "+move.x+","+move.y);
-                g.MoveCurrentUnit(move.x, move.y);
-            }
-            else
-            {
-                console.log(move.unit.name+" decided not to move.");
-            }
 
-            if (move.target != undefined)
-            {
-                console.log(unit.name+" is attacking "+move.target.name);
-                g.attackWithCurrentUnit(move.target.id);
-            }
-        }
+        var moveanim = new MoveAnimator(move, g);
+        moveanim.go();
+        
         /* Update the view after the ai has moved */
         g.updateFogOfWar();
         g.getGameMap().redraw();
@@ -410,7 +395,7 @@ Ai.prototype.Turn =
                 if (move.doMove)
                 {
                     console.log("moving "+move.unit.name+" to "+move.x+","+move.y);
-                    g.MoveCurrentUnit(move.x, move.y);
+                    g.moveCurrentUnit(move.x, move.y);
                 }
                 else
                 {

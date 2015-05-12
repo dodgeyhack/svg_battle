@@ -67,6 +67,20 @@ function is_path_valid
     test_fn
 )
 {
+    return get_path(max_dist, game, start_x, start_y, dest_x, dest_y, test_fn) != false;
+}
+
+function get_path
+(
+    max_dist,
+    game,
+    start_x,
+    start_y,
+    dest_x,
+    dest_y,
+    test_fn
+)
+{
     var game_map = game.getGameMap();
     /* 
      * The open list.
@@ -112,20 +126,16 @@ function is_path_valid
         if (current_tile.x == dest_x && current_tile.y == dest_y)
         {
             // we have reached our goal.
-            // All we need to do now is indicate success
-            // we don't actually care about the path, just whether
-            // we can get there.
-            /*
-            // TODO: step through parent nodes and mark path on game_map
-            // for testing purposes.
-            while (current_tile.parent != null)
+            var rpath = [];
+
+            // path is backwards, so return in reverse order.
+            while (current_tile != null)
             {
-                var gm_tile = game_map.getTile(current_tile.x, current_tile.y);
-                gm_tile.sprite.setAttribute("fill", "red");
+                rpath.push({x: current_tile.x, y: current_tile.y});
                 current_tile = current_tile.parent;
             }
-            */
-            return true;
+
+            return rpath;
         }
 
         current_tile.closed = true;
@@ -187,3 +197,4 @@ function is_path_valid
         }
     }
 }
+

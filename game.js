@@ -208,7 +208,7 @@ Game.prototype.getCurrentUnit =
         return this.getCurrentArmy().getUnit(this.cur_unit);
     }
     
-Game.prototype.MoveCurrentUnit =
+Game.prototype.moveCurrentUnit =
     function(mx, my)
     {
         if (!this.getCurrentArmy().getTracker().hasWits())
